@@ -62,16 +62,44 @@ class _EkycNfcPageState extends State<EkycNfcPage> {
 
   Map<String, dynamic> _parseResult(final Map<String, dynamic> json) {
     return {
-      "Avatar NFC": json["IMAGE_AVATAR_CARD_NFC"],
+      "Avatar NFC": json["PATH_IMAGE_AVATAR"],
       "Client session": json["CLIENT_SESSION_RESULT"],
-      "Log NFC": json["LOG_NFC"],
-      "Hash avatar": json["HASH_AVATAR"],
+      "Data NFC": json["DATA_NFC_RESULT"],
+      "Hash avatar": json["HASH_IMAGE_AVATAR"],
       "Postcode original location": json["POST_CODE_ORIGINAL_LOCATION_RESULT"],
       "Postcode recent location": json["POST_CODE_RECENT_LOCATION_RESULT"],
       "Time scan NFC": json["TIME_SCAN_NFC"],
-      "Check auth chip": json["CHECK_AUTH_CHIP_RESULT"],
-      "Qrcode": json["QR_CODE_RESULT_NFC"],
+      "Check auth chip": json["STATUS_CHIP_AUTHENTICATION"],
+      "Qrcode": json["QR_CODE_RESULT"],
     };
+  }
+
+  Future<Map<String, dynamic>> _navigateToScanNfcNoGuide() async {
+    try {
+      final result = await _channel.invokeMethod("navigateToScanNfcNoGuide", {
+        "access_token": "<ACCESS_TOKEN> (including bearer)",
+        "token_id": "<TOKEN_ID>",
+        "token_key": "<TOKEN_KEY>",
+        "access_token_ekyc": "<ACCESS_TOKEN_EKYC> (including bearer)",
+        "token_id_ekyc": "<TOKEN_ID_EKYC>",
+        "token_key_ekyc": "<TOKEN_KEY_EKYC>",
+        "card_id": _textIdController.text.trim(),
+        "card_dob": _textDobController.text.trim(),
+        "card_expire_date": _textExpireController.text.trim(),
+      });
+
+      final Map<String, dynamic> json = jsonDecode(result);
+
+      return json.isEmpty ? {} : _parseResult(jsonDecode(result));
+    } on PlatformException catch (e) {
+      var snackBar = SnackBar(
+        content: Text(e.message ?? ''),
+      );
+
+      ScaffoldMessenger.of(context).showSnackBar(snackBar);
+
+      return {};
+    }
   }
 
   Future<Map<String, dynamic>> _navigateToScanNfc() async {
@@ -80,6 +108,9 @@ class _EkycNfcPageState extends State<EkycNfcPage> {
         "access_token": "<ACCESS_TOKEN> (including bearer)",
         "token_id": "<TOKEN_ID>",
         "token_key": "<TOKEN_KEY>",
+        "access_token_ekyc": "<ACCESS_TOKEN_EKYC> (including bearer)",
+        "token_id_ekyc": "<TOKEN_ID_EKYC>",
+        "token_key_ekyc": "<TOKEN_KEY_EKYC>",
         "card_id": _textIdController.text.trim(),
         "card_dob": _textDobController.text.trim(),
         "card_expire_date": _textExpireController.text.trim(),
@@ -101,10 +132,16 @@ class _EkycNfcPageState extends State<EkycNfcPage> {
 
   Future<Map<String, dynamic>> _navigateToNfcQrCode() async {
     try {
-      final result = await _channel.invokeMethod('navigateToNfcQrCode', {
+      final result = await _channel.invokeMethod("navigateToScanNfc", {
         "access_token": "<ACCESS_TOKEN> (including bearer)",
         "token_id": "<TOKEN_ID>",
         "token_key": "<TOKEN_KEY>",
+        "access_token_ekyc": "<ACCESS_TOKEN_EKYC> (including bearer)",
+        "token_id_ekyc": "<TOKEN_ID_EKYC>",
+        "token_key_ekyc": "<TOKEN_KEY_EKYC>",
+        "card_id": _textIdController.text.trim(),
+        "card_dob": _textDobController.text.trim(),
+        "card_expire_date": _textExpireController.text.trim(),
       });
 
       final Map<String, dynamic> json = jsonDecode(result);
@@ -155,17 +192,32 @@ class _EkycNfcPageState extends State<EkycNfcPage> {
             child: Padding(
               padding: const EdgeInsets.symmetric(horizontal: 16),
               child: ElevatedButton(
-                onPressed: () async => _showMyDialog(),
+                onPressed: () async => _showMyDialog(() async {
+                  _navigateToLog(await _navigateToScanNfc(), removeDialog: true);
+                }),
                 child: const Text('Thực hiện Đọc chip NFC'),
               ),
             ),
-          )
+          ),
+          const SizedBox(height: 8),
+          SizedBox(
+            width: double.infinity,
+            child: Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 16),
+              child: ElevatedButton(
+                onPressed: () async => _showMyDialog(() async {
+                  _navigateToLog(await _navigateToScanNfcNoGuide(), removeDialog: true);
+                }),
+                child: const Text('Thực hiện đọc chip NFC không giao diện'),
+              ),
+            ),
+          ),
         ],
       ),
     );
   }
 
-  Future<void> _showMyDialog() async {
+  Future<void> _showMyDialog(VoidCallback onPressed) async {
     return showDialog<void>(
       context: context,
       barrierDismissible: false, // user must tap button!
@@ -221,9 +273,7 @@ class _EkycNfcPageState extends State<EkycNfcPage> {
             ),
             TextButton(
               child: const Text('Ok'),
-              onPressed: () async {
-                _navigateToLog(await _navigateToScanNfc(), removeDialog: true);
-              },
+              onPressed: onPressed,
             ),
           ],
         );

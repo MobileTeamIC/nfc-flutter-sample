@@ -42,3 +42,6 @@ app.*.map.json
 /android/app/debug
 /android/app/profile
 /android/app/release
+/android/nfc/vnpt_nfc_sdk-release-*.aar
+/android/scanqr/build
+/android/scanqr/scanqr_ic_sdk-release-*.aar
