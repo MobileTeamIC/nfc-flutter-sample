@@ -23,8 +23,6 @@ NS_ASSUME_NONNULL_BEGIN
 
 - (void) gotoICPopupWarningWithTitle:(NSString *)title content:(NSString *)content;
 
-- (void) gotoICPopupCloseSdk;
-
 
 - (void) callApiUploadAvatarGetHashFileName:(NSString *)fileName title:(NSString *)title description:(NSString *)description dataFile:(NSData *)dataFile;
 
@@ -33,16 +31,18 @@ NS_ASSUME_NONNULL_BEGIN
 - (void) callApiGetPostcodeMatchingPlaceOfOrigin:(NSString *)placeOfOrigin;
 - (void) callApiGetPostcodeMatchingPlaceOfResidence:(NSString *)placeOfResidence;
 
-- (void) callApiVerifyNFCCardID:(NSString *)idCard deviceType:(NSString *)deviceType deviceName:(NSString *)deviceName deviceVersion:(NSString *)deviceVersion rawData:(NSDictionary *)rawData;
-
 
 - (void) resetICNFCSaveData;
 
 - (void) saveClientSession:(NSString *)clientSession;
 
+- (void) saveMRZCodeImage:(UIImage *)image cropedImage:(UIImage *)cropedImage path:(NSURL *)path;
+
 - (void) saveQRCode:(NSString *)qrCode image:(UIImage *)image cropedImage:(UIImage *)cropedImage path:(NSURL *)path;
 
 - (void) saveAvatar:(UIImage *)avatar;
+
+- (void) saveChipAuthentication:(ICNFCAuthenticationStatus)chipAuthentication activeAuthentication:(ICNFCAuthenticationStatus)activeAuthentication;
 
 @end
 

@@ -10,19 +10,51 @@
 #import <UIKit/UIKit.h>
 
 typedef enum : NSUInteger {
-    QRCode, // chụp ảnh chân dung xa gần
-    NFCReader, // chụp ảnh chân dung quay mặt 02 hướng phải và thẳng
-} CardReaderStep;
-
+    QRCode,     // Quét mã QR sau đó thực hiện đọc thông tin bằng NFC
+    MRZCode,    // Quét mã MRZ sau đó thực hiện đọc thông tin bằng NFC
+    NFCReader,  // Đọc thông tin bằng NFC
+    NFCOutside, // Đọc thông tin bằng NFC ngay tại Ứng dụng (không mở SDK)
+} ReaderCardMode; // Định nghĩa luồng thực hiện đọc thông tin thẻ căn cước
 
 
 typedef NS_ENUM(NSInteger, CardReaderValues) {
-    VerifyDocumentInfo      = 100019,       // Security Object Document (SOD, COM)
+    VerifyDocumentInfo      = 100019,       // Security Object Document (SOD)
     MRZInfo                 = 100020,       // MRZ Code (DG1)
     ImageAvatarInfo         = 100021,       // Image Base64 (DG2)
     SecurityDataInfo        = 100022,       // Security Data (DG14, DG15)
 };
 
+
+typedef enum : NSUInteger {
+    ICNFCStarted,       // Trạng thái bắt đầu lắng nghe
+    ICNFCDidDetect,     // Trạng thái xác định được tín hiệu đọc thẻ căn cước
+    ICNFCReading,       // Trạng thái đang đọc thẻ căn cước
+    ICNFCDidError,      // Trạng thái đọc thẻ căn cước bị lỗi
+    ICNFCCompleted   // Trạng thái hoàn thành đọc thẻ căn cước 
+} ICNFCReaderState;
+
+
+typedef enum : NSUInteger {
+    ASNone,         // Không thực hiện xác thực CA AA
+    ASSuccess,      // Xác thực CA hoặc AA THÀNH CÔNG
+    ASFailed,       // Xác thực CA hoặc AA KHÔNG THÀNH CÔNG
+} ICNFCAuthenticationStatus;
+
+
+typedef enum : NSUInteger {
+    ICNFCHelpQRCode,        // Hướng dẫn quét mã QR
+    ICNFCScanQRCode,        // Quét mã QR
+    ICNFCHelpMRZCode,       // Hướng dẫn quét mã MRZ
+    ICNFCScanMRZCode,       // Quét mã MRZ
+    ICNFCReaderNFC          // Đọc thông tin NFC
+} ICNFCLastStep; // Xác định các giá trị của bước cuối cùng khi người dùng thoát SDK
+
+
+// Nút đóng SDK trên thanh tiêu đề
+typedef enum : NSUInteger {
+    LeftButton,     // nút đóng bên trái
+    RightButton,    // nút đóng bên phải.
+} ModeButtonHeaderBar;
 
 
 #pragma mark - WireFrameProtocol
@@ -30,8 +62,6 @@ typedef NS_ENUM(NSInteger, CardReaderValues) {
 @protocol ICMainNFCReaderWireframeProtocol <NSObject>
 
 - (void) presentICPopupWarningWithTitle:(NSString *)title content:(NSString *)content;
-
-- (void) presentICPopupCloseSdk;
 
 @end
 
@@ -55,7 +85,6 @@ typedef NS_ENUM(NSInteger, CardReaderValues) {
 
 - (void) sendResultGetPostcodeMatchingPlaceOfResidenceSucceed:(NSDictionary *)data;
 
-- (void) sendResultVerifyNFCCardSucceed:(NSDictionary *)data;
 
 @end
 
@@ -72,7 +101,6 @@ typedef NS_ENUM(NSInteger, CardReaderValues) {
 - (void) handleGetPostcodeMatchingPlaceOfOrigin:(NSString *)placeOfOrigin;
 - (void) handleGetPostcodeMatchingPlaceOfResidence:(NSString *)placeOfResidence;
 
-- (void) handleVerifyNFCCardID:(NSString *)idCard deviceType:(NSString *)deviceType deviceName:(NSString *)deviceName deviceVersion:(NSString *)deviceVersion rawData:(NSDictionary *)rawData;
 
 
 // thực hiện CÀI ĐẶT LẠI thông tin ICNFCSaveData
@@ -80,9 +108,14 @@ typedef NS_ENUM(NSInteger, CardReaderValues) {
 
 - (void) handleSaveClientSession:(NSString *)clientSession;
 
+- (void) handleSaveMRZCodeImage:(UIImage *)image cropedImage:(UIImage *)cropedImage path:(NSURL *)path;
+
 - (void) handleSaveQRCode:(NSString *)qrCode image:(UIImage *)image cropedImage:(UIImage *)cropedImage path:(NSURL *)path;
 
 - (void) handleSaveAvatar:(UIImage *)avatar;
+
+- (void) handleSaveChipAuthentication:(ICNFCAuthenticationStatus)chipAuthentication activeAuthentication:(ICNFCAuthenticationStatus)activeAuthentication;
+
 
 
 @end
@@ -101,6 +134,5 @@ typedef NS_ENUM(NSInteger, CardReaderValues) {
 
 - (void) showResultGetPostcodeMatchingPlaceOfResidenceSucceed:(NSDictionary *)data;
 
-- (void) showResultVerifyNFCCardSucceed:(NSDictionary *)data;
 
 @end

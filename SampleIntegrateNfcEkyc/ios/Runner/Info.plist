@@ -26,6 +26,10 @@
 	<string>$(FLUTTER_BUILD_NUMBER)</string>
 	<key>LSRequiresIPhoneOS</key>
 	<true/>
+	<key>NFCReaderUsageDescription</key>
+	<string>Ứng dụng sử dụng NFC để quét thông tin Căn cước gắn chip hoặc Hộ chiếu</string>
+	<key>NSCameraUsageDescription</key>
+	<string>Ứng dụng sử dụng máy ảnh để quét thông tin Căn cước gắn chip hoặc Hộ chiếu</string>
 	<key>UIApplicationSupportsIndirectInputEvents</key>
 	<true/>
 	<key>UILaunchStoryboardName</key>
@@ -47,10 +51,6 @@
 	</array>
 	<key>UIViewControllerBasedStatusBarAppearance</key>
 	<false/>
-	<key>NFCReaderUsageDescription</key>
-	<string>Ứng dụng sử dụng NFC để quét thông tin Căn cước gắn chip hoặc Hộ chiếu</string>
-	<key>NSCameraUsageDescription</key>
-	<string>Ứng dụng sử dụng máy ảnh để quét thông tin Căn cước gắn chip hoặc Hộ chiếu</string>
 	<key>com.apple.developer.nfc.readersession.iso7816.select-identifiers</key>
 	<array>
 		<string>A0000002471001</string>

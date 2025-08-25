@@ -25,6 +25,12 @@ FOUNDATION_EXPORT const unsigned char ICNFCCardReaderVersionString[];
 #import <ICNFCCardReader/ICMainNFCReaderProtocols.h>
 
 #import <ICNFCCardReader/ICNFCHelpFullScreenVideosViewController.h>
+#import <ICNFCCardReader/ICNFCHelpImageViewController.h>
+
+#import <ICNFCCardReader/ICNFCPopupCloseSdkViewController.h>
+#import <ICNFCCardReader/ICNFCPopupPermissionCameraViewController.h>
 
 #import <ICNFCCardReader/ICNFCSaveData.h>
 #import <ICNFCCardReader/ICNFCConfig.h>
+
+#import <ICNFCCardReader/ICNFCPopup.h>

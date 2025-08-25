@@ -15,7 +15,12 @@ NS_ASSUME_NONNULL_BEGIN
 @protocol ICNFCHelpFullScreenVideosDelegate <NSObject>
 
 @required
-- (void) pressButtonSkipICNFCHelpFullScreenVideos;
+
+/**
+ * Phương thức được thực hiện khi người dùng nhấn nút BỎ QUA HƯỚNG DẪN ở màn hình Hướng dẫn
+ * → Thực hiện đọc thông tin thẻ căn cước
+ */
+- (void) icNFCHelpFullScreenVideosGotIt;
 
 @end
 

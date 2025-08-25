@@ -1,8 +1,9 @@
 // swift-interface-format-version: 1.0
-// swift-compiler-version: Apple Swift version 5.7.2 (swiftlang-5.7.2.135.5 clang-1400.0.29.51)
-// swift-module-flags: -target arm64-apple-ios9.0 -enable-objc-interop -enable-library-evolution -swift-version 5 -enforce-exclusivity=checked -O -module-name ICNFCCardReader
+// swift-compiler-version: Apple Swift version 5.8.1 (swiftlang-5.8.0.124.5 clang-1403.0.22.11.100)
+// swift-module-flags: -target arm64-apple-ios11.0 -enable-objc-interop -enable-library-evolution -swift-version 5 -enforce-exclusivity=checked -O -module-name ICNFCCardReader
 // swift-module-flags-ignorable: -enable-bare-slash-regex
 import AVFoundation
+import AudioToolbox
 import Combine
 import CommonCrypto
 import CoreGraphics
@@ -16,6 +17,7 @@ import OpenSSL
 import QuartzCore
 import Swift
 import UIKit
+import Vision
 import _Concurrency
 import _StringProcessing
 @_inheritsConvenienceInitializers @_hasMissingDesignatedInitializers final public class ImageAsset : ICNFCCardReader.Asset {
@@ -23,14 +25,7 @@ import _StringProcessing
   final public let directory: Swift.String
   final public let width: Swift.Double
   final public let height: Swift.Double
-  override final public func encode(to encoder: Swift.Encoder) throws
-  @objc deinit
-}
-@_inheritsConvenienceInitializers @_hasMissingDesignatedInitializers @available(iOS 13, macOS 10.15, *)
-public class DataGroup7 : ICNFCCardReader.DataGroup {
-  public var imageData: [Swift.UInt8] {
-    get
-  }
+  override final public func encode(to encoder: any Swift.Encoder) throws
   @objc deinit
 }
 @available(iOS 13, macOS 10.15, *)
@@ -65,12 +60,12 @@ public class SecureMessaging {
   @objc deinit
 }
 extension ICNFCCardReader.Vector1D : Swift.Codable {
-  public init(from decoder: Swift.Decoder) throws
-  public func encode(to encoder: Swift.Encoder) throws
+  public init(from decoder: any Swift.Decoder) throws
+  public func encode(to encoder: any Swift.Encoder) throws
 }
 public struct Vector2D : Swift.Codable, Swift.Hashable {
-  public init(from decoder: Swift.Decoder) throws
-  public func encode(to encoder: Swift.Encoder) throws
+  public init(from decoder: any Swift.Decoder) throws
+  public func encode(to encoder: any Swift.Encoder) throws
   public func hash(into hasher: inout Swift.Hasher)
   public static func == (a: ICNFCCardReader.Vector2D, b: ICNFCCardReader.Vector2D) -> Swift.Bool
   public var hashValue: Swift.Int {
@@ -78,8 +73,8 @@ public struct Vector2D : Swift.Codable, Swift.Hashable {
   }
 }
 extension ICNFCCardReader.Vector3D : Swift.Codable {
-  public init(from decoder: Swift.Decoder) throws
-  public func encode(to encoder: Swift.Encoder) throws
+  public init(from decoder: any Swift.Decoder) throws
+  public func encode(to encoder: any Swift.Encoder) throws
 }
 extension ICNFCCardReader.Vector3D {
   public var pointValue: CoreFoundation.CGPoint {
@@ -89,22 +84,10 @@ extension ICNFCCardReader.Vector3D {
     get
   }
 }
-@available(iOS 13, macOS 10.15, *)
-public enum DocTypeEnum : Swift.String {
-  case TD1
-  case TD2
-  case OTHER
-  public init?(rawValue: Swift.String)
-  public typealias RawValue = Swift.String
-  public var rawValue: Swift.String {
-    get
-  }
-}
-@_inheritsConvenienceInitializers @_hasMissingDesignatedInitializers @available(iOS 13, macOS 10.15, *)
-public class DataGroup1 : ICNFCCardReader.DataGroup {
-  public var elements: [Swift.String : Swift.String] {
-    get
-  }
+@_hasMissingDesignatedInitializers @available(iOS 13, macOS 10.15, *)
+public class SecurityInfo {
+  public func getObjectIdentifier() -> Swift.String
+  public func getProtocolOIDString() -> Swift.String
   @objc deinit
 }
 public enum CoordinateSpace : Swift.Int, Swift.Codable {
@@ -117,7 +100,7 @@ public enum CoordinateSpace : Swift.Int, Swift.Codable {
   }
 }
 final public class Animation : Swift.Codable {
-  required public init(from decoder: Swift.Decoder) throws
+  required public init(from decoder: any Swift.Decoder) throws
   public init(dictionary: [Swift.String : Any]) throws
   final public let startFrame: ICNFCCardReader.AnimationFrameTime
   final public let endFrame: ICNFCCardReader.AnimationFrameTime
@@ -126,10 +109,8 @@ final public class Animation : Swift.Codable {
     get
   }
   @objc deinit
-  final public func encode(to encoder: Swift.Encoder) throws
+  final public func encode(to encoder: any Swift.Encoder) throws
 }
-public var countTemplate: Swift.Int
-public var countProgress: Swift.Int
 @available(iOS 13, macOS 10.15, *)
 public enum NFCViewDisplayMessage {
   case requestPresentPassport
@@ -144,33 +125,145 @@ extension ICNFCCardReader.NFCViewDisplayMessage {
     get
   }
 }
+@_inheritsConvenienceInitializers @_hasMissingDesignatedInitializers @available(iOS 13, macOS 10.15, *)
+public class DataGroup12 : ICNFCCardReader.DataGroup {
+  public var issuingAuthority: Swift.String? {
+    get
+  }
+  public var dateOfIssue: Swift.String? {
+    get
+  }
+  public var otherPersonsDetails: Swift.String? {
+    get
+  }
+  public var endorsementsOrObservations: Swift.String? {
+    get
+  }
+  public var taxOrExitRequirements: Swift.String? {
+    get
+  }
+  public var frontImage: [Swift.UInt8]? {
+    get
+  }
+  public var rearImage: [Swift.UInt8]? {
+    get
+  }
+  public var personalizationTime: Swift.String? {
+    get
+  }
+  public var personalizationDeviceSerialNr: Swift.String? {
+    get
+  }
+  @objc deinit
+}
+@_inheritsConvenienceInitializers @_hasMissingDesignatedInitializers @available(iOS 13, macOS 10.15, *)
+public class DataGroup13 : ICNFCCardReader.DataGroup {
+  public static let PREFIX_EID: [Swift.UInt8]
+  public static let IDX_FULLNAME: Swift.UInt8
+  public static let PREFIX_FULLNAME: [Swift.UInt8]
+  public static let IDX_DOB: Swift.UInt8
+  public static let PREFIX_DOB: [Swift.UInt8]
+  public static let IDX_GENDER: Swift.UInt8
+  public static let PREFIX_GENDER: [Swift.UInt8]
+  public static let IDX_NATIONALITY: Swift.UInt8
+  public static let PREFIX_NATIONALITY: [Swift.UInt8]
+  public static let IDX_ETHNICITY: Swift.UInt8
+  public static let PREFIX_ETHNICITY: [Swift.UInt8]
+  public static let IDX_RELIGION: Swift.UInt8
+  public static let PREFIX_RELIGION: [Swift.UInt8]
+  public static let IDX_POG: Swift.UInt8
+  public static let PREFIX_POG: [Swift.UInt8]
+  public static let IDX_POR: Swift.UInt8
+  public static let PREFIX_POR: [Swift.UInt8]
+  public static let IDX_PERSONAL_IDENTIFICATION: Swift.UInt8
+  public static let PREFIX_PERSONAL_IDENTIFICATION: [Swift.UInt8]
+  public static let IDX_DATEOFISSUE: Swift.UInt8
+  public static let PREFIX_DATEOFISSUE: [Swift.UInt8]
+  public static let IDX_DATEOFEXPIRY: Swift.UInt8
+  public static let PREFIX_DATEOFEXPIRY: [Swift.UInt8]
+  public static let IDX_FAMILY: Swift.UInt8
+  public static let PREFIX_FAMILY: [Swift.UInt8]
+  public static let PREFIX_FATHERNAME: [Swift.UInt8]
+  public static let PREFIX_MOTHERNAME: [Swift.UInt8]
+  public static let IDX_PARTNERNAME: Swift.UInt8
+  public static let PREFIX_PARTNERNAME: [Swift.UInt8]
+  public static let IDX_OLDEID: Swift.UInt8
+  public static let PREFIX_OLDEID: [Swift.UInt8]
+  public static let IDX_CARDUNK: Swift.UInt8
+  public static let PREFIX_UNK: [Swift.UInt8]
+  public var eidNumber: Swift.String?
+  public var fullName: Swift.String?
+  public var dateOfBirth: Swift.String?
+  public var gender: Swift.String?
+  public var nationality: Swift.String?
+  public var ethnicity: Swift.String?
+  public var religion: Swift.String?
+  public var placeOfOrigin: Swift.String?
+  public var placeOfResidence: Swift.String?
+  public var personalIdentification: Swift.String?
+  public var dateOfIssue: Swift.String?
+  public var dateOfExpiry: Swift.String?
+  public var fatherName: Swift.String?
+  public var motherName: Swift.String?
+  public var partnerName: Swift.String?
+  public var oldEidNumber: Swift.String?
+  public var unkIdNumber: Swift.String?
+  public var unkInfo: [Swift.String]
+  @objc deinit
+}
+@_hasMissingDesignatedInitializers @available(iOS 13, macOS 10.15, *)
+public class ChipAuthenticationPublicKeyInfo : ICNFCCardReader.SecurityInfo {
+  override public func getObjectIdentifier() -> Swift.String
+  override public func getProtocolOIDString() -> Swift.String
+  public func getKeyId() -> Swift.Int
+  @objc deinit
+}
 @available(iOS 13, *)
 public protocol PassportReaderDelegate {
-  func passportReaderReadingProgress(progress: Swift.Int)
-  func passportReaderSessionDidBecomeActive(_ session: CoreNFC.NFCTagReaderSession)
-  func passportReaderIdInvalidate(_ session: CoreNFC.NFCTagReaderSession, didInvalidateWithError error: Swift.Error)
+  func passportReaderSessionDidBecomeActive(_ session: CoreNFC.NFCTagReaderSession, timeout: Swift.Int)
+  func passportReaderIdInvalidate(_ session: CoreNFC.NFCTagReaderSession, didInvalidateWithError error: any Swift.Error)
   func passportReaderSessionDidDetect(_ session: CoreNFC.NFCTagReaderSession, didDetect tags: [CoreNFC.NFCTag])
+  func passportReaderReadingProgress(dgId: ICNFCCardReader.DataGroupId, progress: Swift.Int)
 }
 @objc @available(iOS 13, *)
 public class PassportReader : ObjectiveC.NSObject {
-  public var delegate: ICNFCCardReader.PassportReaderDelegate?
+  public var delegate: (any ICNFCCardReader.PassportReaderDelegate)?
+  public var isActiveAuthentication: Swift.Bool
+  public var isChipAuthentication: Swift.Bool
   public var passiveAuthenticationUsesOpenSSL: Swift.Bool
   public init(logLevel: ICNFCCardReader.LogLevel = .info, masterListURL: Foundation.URL? = nil)
   public func setMasterListURL(_ masterListURL: Foundation.URL)
   public func overrideNFCDataAmountToRead(amount: Swift.Int)
-  public func readPassport(mrzKey: Swift.String, tags: [ICNFCCardReader.DataGroupId] = [], skipSecureElements: Swift.Bool = true, skipCA: Swift.Bool = false, skipPACE: Swift.Bool = false, customDisplayMessage: ((ICNFCCardReader.NFCViewDisplayMessage) -> Swift.String?)? = nil, completed: @escaping (ICNFCCardReader.NFCPassportModel?, ICNFCCardReader.NFCPassportReaderError?) -> ())
+  #if compiler(>=5.3) && $AsyncAwait
+  @available(*, deprecated, message: "Use readPassport( accessKey: ...) instead")
+  public func readPassport(mrzKey: Swift.String, tags: [ICNFCCardReader.DataGroupId] = [], skipSecureElements: Swift.Bool = true, skipCA: Swift.Bool = false, skipPACE: Swift.Bool = false, customDisplayMessage: ((ICNFCCardReader.NFCViewDisplayMessage) -> Swift.String?)? = nil) async throws -> ICNFCCardReader.NFCPassportModel
+  #endif
+  #if compiler(>=5.3) && $AsyncAwait
+  public func readPassport(accessKey: ICNFCCardReader.PACEAccessKey, tags: [ICNFCCardReader.DataGroupId] = [], skipSecureElements: Swift.Bool = true, skipCA: Swift.Bool = false, skipPACE: Swift.Bool = false, customDisplayMessage: ((ICNFCCardReader.NFCViewDisplayMessage) -> Swift.String?)? = nil) async throws -> ICNFCCardReader.NFCPassportModel
+  #endif
+  public func invalidateSession()
   @objc deinit
 }
 @available(iOS 13, *)
 extension ICNFCCardReader.PassportReader : CoreNFC.NFCTagReaderSessionDelegate {
   public func tagReaderSessionDidBecomeActive(_ session: CoreNFC.NFCTagReaderSession)
-  public func tagReaderSession(_ session: CoreNFC.NFCTagReaderSession, didInvalidateWithError error: Swift.Error)
+  public func tagReaderSession(_ session: CoreNFC.NFCTagReaderSession, didInvalidateWithError error: any Swift.Error)
   public func tagReaderSession(_ session: CoreNFC.NFCTagReaderSession, didDetect tags: [CoreNFC.NFCTag])
 }
 extension UIKit.UIColor {
   public var lottieColorValue: ICNFCCardReader.Color {
     get
   }
+}
+@_inheritsConvenienceInitializers @_hasMissingDesignatedInitializers @available(iOS 13, macOS 10.15, *)
+public class DataGroup15 : ICNFCCardReader.DataGroup {
+  public var rsaPublicKey: Swift.OpaquePointer? {
+    get
+  }
+  public var ecdsaPublicKey: Swift.OpaquePointer? {
+    get
+  }
+  @objc deinit
 }
 @objc final public class CompatibleAnimationKeypath : ObjectiveC.NSObject {
   @objc public init(keypath: Swift.String)
@@ -251,12 +344,12 @@ extension ICNFCCardReader.LottieLoopMode : Swift.Equatable {
   public static func == (lhs: ICNFCCardReader.LottieLoopMode, rhs: ICNFCCardReader.LottieLoopMode) -> Swift.Bool
 }
 @objc @_inheritsConvenienceInitializers @IBDesignable @_Concurrency.MainActor(unsafe) final public class AnimationView : ICNFCCardReader.AnimationViewBase {
-  @_Concurrency.MainActor(unsafe) public init(animation: ICNFCCardReader.Animation?, imageProvider: ICNFCCardReader.AnimationImageProvider? = nil, textProvider: ICNFCCardReader.AnimationTextProvider = DefaultTextProvider(), fontProvider: ICNFCCardReader.AnimationFontProvider = DefaultFontProvider(), configuration: ICNFCCardReader.LottieConfiguration = .shared, logger: ICNFCCardReader.LottieLogger = .shared)
+  @_Concurrency.MainActor(unsafe) public init(animation: ICNFCCardReader.Animation?, imageProvider: (any ICNFCCardReader.AnimationImageProvider)? = nil, textProvider: any ICNFCCardReader.AnimationTextProvider = DefaultTextProvider(), fontProvider: any ICNFCCardReader.AnimationFontProvider = DefaultFontProvider(), configuration: ICNFCCardReader.LottieConfiguration = .shared, logger: ICNFCCardReader.LottieLogger = .shared)
   @_Concurrency.MainActor(unsafe) public init(configuration: ICNFCCardReader.LottieConfiguration = .shared, logger: ICNFCCardReader.LottieLogger = .shared)
   @_Concurrency.MainActor(unsafe) @objc override dynamic public init(frame: CoreFoundation.CGRect)
   @_Concurrency.MainActor(unsafe) @objc required dynamic public init?(coder aDecoder: Foundation.NSCoder)
   @_Concurrency.MainActor(unsafe) final public let configuration: ICNFCCardReader.LottieConfiguration
-  @_Concurrency.MainActor(unsafe) final public var valueProviders: [ICNFCCardReader.AnimationKeypath : ICNFCCardReader.AnyValueProvider] {
+  @_Concurrency.MainActor(unsafe) final public var valueProviders: [ICNFCCardReader.AnimationKeypath : any ICNFCCardReader.AnyValueProvider] {
     get
   }
   @_Concurrency.MainActor(unsafe) final public var backgroundBehavior: ICNFCCardReader.LottieBackgroundBehavior {
@@ -267,15 +360,15 @@ extension ICNFCCardReader.LottieLoopMode : Swift.Equatable {
     get
     set
   }
-  @_Concurrency.MainActor(unsafe) final public var imageProvider: ICNFCCardReader.AnimationImageProvider {
+  @_Concurrency.MainActor(unsafe) final public var imageProvider: any ICNFCCardReader.AnimationImageProvider {
     get
     set
   }
-  @_Concurrency.MainActor(unsafe) final public var textProvider: ICNFCCardReader.AnimationTextProvider {
+  @_Concurrency.MainActor(unsafe) final public var textProvider: any ICNFCCardReader.AnimationTextProvider {
     get
     set
   }
-  @_Concurrency.MainActor(unsafe) final public var fontProvider: ICNFCCardReader.AnimationFontProvider {
+  @_Concurrency.MainActor(unsafe) final public var fontProvider: any ICNFCCardReader.AnimationFontProvider {
     get
     set
   }
@@ -337,7 +430,7 @@ extension ICNFCCardReader.LottieLoopMode : Swift.Equatable {
   @_Concurrency.MainActor(unsafe) final public func pause()
   @_Concurrency.MainActor(unsafe) final public func reloadImages()
   @_Concurrency.MainActor(unsafe) final public func forceDisplayUpdate()
-  @_Concurrency.MainActor(unsafe) final public func setValueProvider(_ valueProvider: ICNFCCardReader.AnyValueProvider, keypath: ICNFCCardReader.AnimationKeypath)
+  @_Concurrency.MainActor(unsafe) final public func setValueProvider(_ valueProvider: any ICNFCCardReader.AnyValueProvider, keypath: ICNFCCardReader.AnimationKeypath)
   @_Concurrency.MainActor(unsafe) final public func getValue(for keypath: ICNFCCardReader.AnimationKeypath, atFrame: ICNFCCardReader.AnimationFrameTime?) -> Any?
   @_Concurrency.MainActor(unsafe) final public func getOriginalValue(for keypath: ICNFCCardReader.AnimationKeypath, atFrame: ICNFCCardReader.AnimationFrameTime?) -> Any?
   @_Concurrency.MainActor(unsafe) final public func logHierarchyKeypaths()
@@ -347,12 +440,6 @@ extension ICNFCCardReader.LottieLoopMode : Swift.Equatable {
   @_Concurrency.MainActor(unsafe) final public func setNodeIsEnabled(isEnabled: Swift.Bool, keypath: ICNFCCardReader.AnimationKeypath)
   @_Concurrency.MainActor(unsafe) final public func progressTime(forMarker named: Swift.String) -> ICNFCCardReader.AnimationProgressTime?
   @_Concurrency.MainActor(unsafe) final public func frameTime(forMarker named: Swift.String) -> ICNFCCardReader.AnimationFrameTime?
-  @objc deinit
-}
-@_hasMissingDesignatedInitializers @available(iOS 13, macOS 10.15, *)
-public class SecurityInfo {
-  public func getObjectIdentifier() -> Swift.String
-  public func getProtocolOIDString() -> Swift.String
   @objc deinit
 }
 @objc @_inheritsConvenienceInitializers @_Concurrency.MainActor(unsafe) open class AnimatedSwitch : ICNFCCardReader.AnimatedControl {
@@ -383,39 +470,6 @@ public class SecurityInfo {
   @_Concurrency.MainActor(unsafe) override public func animationDidSet()
   @objc deinit
 }
-@available(iOS 13, macOS 10.15, *)
-public enum DataGroupId : Swift.Int, Swift.CaseIterable {
-  case COM
-  case DG1
-  case DG2
-  case DG3
-  case DG4
-  case DG5
-  case DG6
-  case DG7
-  case DG8
-  case DG9
-  case DG10
-  case DG11
-  case DG12
-  case DG13
-  case DG14
-  case DG15
-  case DG16
-  case SOD
-  case Unknown
-  public func getName() -> Swift.String
-  public static func getIDFromName(name: Swift.String) -> ICNFCCardReader.DataGroupId
-  public init?(rawValue: Swift.Int)
-  public typealias AllCases = [ICNFCCardReader.DataGroupId]
-  public typealias RawValue = Swift.Int
-  public static var allCases: [ICNFCCardReader.DataGroupId] {
-    get
-  }
-  public var rawValue: Swift.Int {
-    get
-  }
-}
 @objc @_inheritsConvenienceInitializers @_Concurrency.MainActor(unsafe) open class AnimatedButton : ICNFCCardReader.AnimatedControl {
   @_Concurrency.MainActor(unsafe) override public init(animation: ICNFCCardReader.Animation, configuration: ICNFCCardReader.LottieConfiguration = .shared)
   @_Concurrency.MainActor(unsafe) @objc override dynamic public init()
@@ -428,6 +482,100 @@ public enum DataGroupId : Swift.Int, Swift.CaseIterable {
   @_Concurrency.MainActor(unsafe) public func setPlayRange(fromMarker fromName: Swift.String, toMarker toName: Swift.String, event: UIKit.UIControl.Event)
   @_Concurrency.MainActor(unsafe) @objc override dynamic public func beginTracking(_ touch: UIKit.UITouch, with event: UIKit.UIEvent?) -> Swift.Bool
   @_Concurrency.MainActor(unsafe) @objc override dynamic public func endTracking(_ touch: UIKit.UITouch?, with event: UIKit.UIEvent?)
+  @objc deinit
+}
+@_inheritsConvenienceInitializers @_hasMissingDesignatedInitializers @available(iOS 13, macOS 10.15, *)
+public class COM : ICNFCCardReader.DataGroup {
+  public var version: Swift.String {
+    get
+  }
+  public var unicodeVersion: Swift.String {
+    get
+  }
+  public var dataGroupsPresent: [Swift.String] {
+    get
+  }
+  @objc deinit
+}
+@objc public protocol ICMRZScannerCodeDelegate {
+  @objc func icMRZScannerCodeDismissed(isStepScan: Swift.Bool)
+  @objc func icMRZScannerCodeCompleted(idNumber: Swift.String, birthDate: Swift.String, expiryDate: Swift.String, backImage: UIKit.UIImage, cropImage: UIKit.UIImage)
+}
+@_inheritsConvenienceInitializers @available(iOS 13.0, *)
+@objc @_Concurrency.MainActor(unsafe) open class ICMRZScannerCodeViewController : ICNFCCardReader.ICNFCBaseViewController {
+  @objc @_Concurrency.MainActor(unsafe) weak public var scanMRZCodeDelegate: (any ICNFCCardReader.ICMRZScannerCodeDelegate)?
+  @objc @_Concurrency.MainActor(unsafe) public var languageApplication: Swift.String
+  @objc @_Concurrency.MainActor(unsafe) public var isShowTutorial: Swift.Bool
+  @objc @_Concurrency.MainActor(unsafe) public var isDisableTutorial: Swift.Bool
+  @_Concurrency.MainActor(unsafe) @objc override dynamic open func viewDidLoad()
+  @_Concurrency.MainActor(unsafe) @objc override dynamic open func viewWillAppear(_ animated: Swift.Bool)
+  @_Concurrency.MainActor(unsafe) @objc override dynamic open func viewDidAppear(_ animated: Swift.Bool)
+  @_Concurrency.MainActor(unsafe) @objc override dynamic open func viewWillDisappear(_ animated: Swift.Bool)
+  @_Concurrency.MainActor(unsafe) @objc override dynamic open func viewDidDisappear(_ animated: Swift.Bool)
+  @_Concurrency.MainActor(unsafe) @objc override dynamic open func viewWillLayoutSubviews()
+  @_Concurrency.MainActor(unsafe) @objc override dynamic open func viewDidLayoutSubviews()
+  @objc @_Concurrency.MainActor(unsafe) public func deallocCameraSession()
+  @_Concurrency.MainActor(unsafe) @objc override dynamic public init(nibName nibNameOrNil: Swift.String?, bundle nibBundleOrNil: Foundation.Bundle?)
+  @_Concurrency.MainActor(unsafe) @objc required dynamic public init?(coder: Foundation.NSCoder)
+  @objc deinit
+}
+@available(iOS 13.0, *)
+extension ICNFCCardReader.ICMRZScannerCodeViewController : ICNFCCardReader.QKMRZScannerViewDelegate {
+  @_Concurrency.MainActor(unsafe) public func mrzScannerView(_ mrzScannerView: ICNFCCardReader.QKMRZScannerView, didFind scanResult: ICNFCCardReader.QKMRZScanResult, mrzLines: [Swift.String])
+}
+@available(iOS 13.0, *)
+extension ICNFCCardReader.ICMRZScannerCodeViewController : ICNFCCardReader.ICNFCHelpImageDelegate {
+  @_Concurrency.MainActor(unsafe) @objc dynamic public func icNFCHelpImageGotIt()
+  @_Concurrency.MainActor(unsafe) @objc dynamic public func icNFCHelpImageDismissed()
+}
+@available(iOS 13.0, *)
+extension ICNFCCardReader.ICMRZScannerCodeViewController : ICNFCCardReader.ICPopupCloseSdkDelegate {
+  @_Concurrency.MainActor(unsafe) @objc dynamic public func icPopupCloseSdkPressedLeft()
+  @_Concurrency.MainActor(unsafe) @objc dynamic public func icPopupCloseSdkPressedRight()
+}
+@available(iOS 13.0, *)
+extension ICNFCCardReader.ICMRZScannerCodeViewController : ICNFCCardReader.ICPopupPermissionCameraDelegate {
+  @_Concurrency.MainActor(unsafe) @objc dynamic public func icPopupPermissionCameraPressedLeft()
+  @_Concurrency.MainActor(unsafe) @objc dynamic public func icPopupPermissionCameraPressedRight()
+}
+@_inheritsConvenienceInitializers @_hasMissingDesignatedInitializers @available(iOS 13, macOS 10.15, *)
+public class DataGroup11 : ICNFCCardReader.DataGroup {
+  public var fullName: Swift.String? {
+    get
+  }
+  public var personalNumber: Swift.String? {
+    get
+  }
+  public var dateOfBirth: Swift.String? {
+    get
+  }
+  public var placeOfBirth: Swift.String? {
+    get
+  }
+  public var address: Swift.String? {
+    get
+  }
+  public var telephone: Swift.String? {
+    get
+  }
+  public var profession: Swift.String? {
+    get
+  }
+  public var title: Swift.String? {
+    get
+  }
+  public var personalSummary: Swift.String? {
+    get
+  }
+  public var proofOfCitizenship: Swift.String? {
+    get
+  }
+  public var tdNumbers: Swift.String? {
+    get
+  }
+  public var custodyInfo: Swift.String? {
+    get
+  }
   @objc deinit
 }
 final public class Keyframe<T> {
@@ -558,6 +706,9 @@ public class NFCPassportModel {
   public var chipAuthenticationStatus: ICNFCCardReader.PassportAuthenticationStatus {
     get
   }
+  public var activeAuthenticationStatus: ICNFCCardReader.PassportAuthenticationStatus {
+    get
+  }
   public var passportCorrectlySigned: Swift.Bool {
     get
   }
@@ -576,7 +727,7 @@ public class NFCPassportModel {
   public var activeAuthenticationSignature: [Swift.UInt8] {
     get
   }
-  public var verificationErrors: [Swift.Error] {
+  public var verificationErrors: [any Swift.Error] {
     get
   }
   public var isPACESupported: Swift.Bool {
@@ -604,22 +755,13 @@ public class NFCPassportModel {
   public func verifyActiveAuthentication(challenge: [Swift.UInt8], signature: [Swift.UInt8])
   @objc deinit
 }
-@_inheritsConvenienceInitializers @_hasMissingDesignatedInitializers @available(iOS 13, macOS 10.15, *)
-public class DataGroup15 : ICNFCCardReader.DataGroup {
-  public var rsaPublicKey: Swift.OpaquePointer? {
-    get
-  }
-  public var ecdsaPublicKey: Swift.OpaquePointer? {
-    get
-  }
-  @objc deinit
-}
 public enum LogLevel : Swift.Int, Swift.CaseIterable {
   case verbose
   case debug
   case info
   case warning
   case error
+  case none
   public init?(rawValue: Swift.Int)
   public typealias AllCases = [ICNFCCardReader.LogLevel]
   public typealias RawValue = Swift.Int
@@ -660,29 +802,79 @@ public struct ResponseAPDU {
   @_Concurrency.MainActor(unsafe) @objc required dynamic public init?(coder: Foundation.NSCoder)
   @objc deinit
 }
-@_hasMissingDesignatedInitializers @available(iOS 13, macOS 10.15, *)
-public class CardAccess {
-  public var securityInfos: [ICNFCCardReader.SecurityInfo] {
+@_hasMissingDesignatedInitializers public class QKMRZScanResult {
+  final public let documentImage: UIKit.UIImage
+  final public let documentType: Swift.String
+  final public let countryCode: Swift.String
+  final public let surnames: Swift.String
+  final public let givenNames: Swift.String
+  final public let documentNumber: Swift.String
+  final public let nationality: Swift.String
+  final public let birthDate: Foundation.Date?
+  final public let sex: Swift.String?
+  final public let expiryDate: Foundation.Date?
+  final public let personalNumber: Swift.String
+  final public let personalNumber2: Swift.String?
+  final public let birthDateString: Swift.String
+  final public let expiryDateString: Swift.String
+  public var faceImage: UIKit.UIImage? {
     get
   }
   @objc deinit
 }
-@_hasMissingDesignatedInitializers @available(iOS 13, macOS 10.15, *)
-public class ChipAuthenticationPublicKeyInfo : ICNFCCardReader.SecurityInfo {
-  override public func getObjectIdentifier() -> Swift.String
-  override public func getProtocolOIDString() -> Swift.String
-  public func getKeyId() -> Swift.Int
-  @objc deinit
+public struct QKMRZResult {
+  public let documentType: Swift.String
+  public let countryCode: Swift.String
+  public let surnames: Swift.String
+  public let givenNames: Swift.String
+  public let documentNumber: Swift.String
+  public let nationality: Swift.String
+  public let birthDate: Foundation.Date?
+  public let sex: Swift.String?
+  public let expiryDate: Foundation.Date?
+  public let personalNumber: Swift.String
+  public let personalNumber2: Swift.String?
+  public let birthDateString: Swift.String
+  public let expiryDateString: Swift.String
+  public let isDocumentNumberValid: Swift.Bool
+  public let isBirthDateValid: Swift.Bool
+  public let isExpiryDateValid: Swift.Bool
+  public let isPersonalNumberValid: Swift.Bool?
+  public let allCheckDigitsValid: Swift.Bool
 }
-@_hasMissingDesignatedInitializers @available(iOS 13, macOS 10.15, *)
-public class ChipAuthenticationInfo : ICNFCCardReader.SecurityInfo {
-  override public func getObjectIdentifier() -> Swift.String
-  override public func getProtocolOIDString() -> Swift.String
-  public func getKeyId() -> Swift.Int
-  public static func toKeyAgreementAlgorithm(oid: Swift.String) throws -> Swift.String
-  public static func toCipherAlgorithm(oid: Swift.String) throws -> Swift.String
-  public static func toKeyLength(oid: Swift.String) throws -> Swift.Int
+extension ICNFCCardReader.BERTLV {
+  public static func parse(hexString: Swift.String) throws -> [ICNFCCardReader.BERTLV]
+  public static func parse(bytes: [Swift.UInt8]) throws -> [ICNFCCardReader.BERTLV]
+}
+@available(iOS 13.0, *)
+public protocol QKMRZScannerViewDelegate : AnyObject {
+  func mrzScannerView(_ mrzScannerView: ICNFCCardReader.QKMRZScannerView, didFind scanResult: ICNFCCardReader.QKMRZScanResult, mrzLines: [Swift.String])
+}
+@objc @_inheritsConvenienceInitializers @available(iOS 13.0, *)
+@IBDesignable @_Concurrency.MainActor(unsafe) public class QKMRZScannerView : UIKit.UIView {
+  @objc @_Concurrency.MainActor(unsafe) dynamic public var isScanning: Swift.Bool
+  @_Concurrency.MainActor(unsafe) public var vibrateOnResult: Swift.Bool
+  @_Concurrency.MainActor(unsafe) public var cutoutRectCustom: CoreFoundation.CGRect?
+  @_Concurrency.MainActor(unsafe) weak public var delegate: (any ICNFCCardReader.QKMRZScannerViewDelegate)?
+  @_Concurrency.MainActor(unsafe) public var cutoutRect: CoreFoundation.CGRect {
+    get
+  }
+  @_Concurrency.MainActor(unsafe) @objc override dynamic public init(frame: CoreFoundation.CGRect)
+  @_Concurrency.MainActor(unsafe) @objc required dynamic public init?(coder aDecoder: Foundation.NSCoder)
   @objc deinit
+  @_Concurrency.MainActor(unsafe) @objc override dynamic public func prepareForInterfaceBuilder()
+  @_Concurrency.MainActor(unsafe) @objc override dynamic public func layoutSubviews()
+  @objc @_Concurrency.MainActor(unsafe) public func startScanning()
+  @objc @_Concurrency.MainActor(unsafe) public func stopScanning()
+  @objc @_Concurrency.MainActor(unsafe) public var isSessionRunning: Swift.Bool {
+    @objc get
+  }
+  @objc @_Concurrency.MainActor(unsafe) public func removeInputOutput()
+  @objc @_Concurrency.MainActor(unsafe) public func deallocSession()
+}
+@available(iOS 13.0, *)
+extension ICNFCCardReader.QKMRZScannerView : AVFoundation.AVCaptureVideoDataOutputSampleBufferDelegate {
+  @_Concurrency.MainActor(unsafe) @objc dynamic public func captureOutput(_ output: AVFoundation.AVCaptureOutput, didOutput sampleBuffer: CoreMedia.CMSampleBuffer, from connection: AVFoundation.AVCaptureConnection)
 }
 @available(iOS 13, *)
 public class BACHandler {
@@ -691,7 +883,9 @@ public class BACHandler {
   public var kifd: [Swift.UInt8]
   public init()
   public init(tagReader: ICNFCCardReader.TagReader)
-  public func performBACAndGetSessionKeys(mrzKey: Swift.String, completed: @escaping (_ error: ICNFCCardReader.NFCPassportReaderError?) -> ())
+  #if compiler(>=5.3) && $AsyncAwait
+  public func performBACAndGetSessionKeys(mrzKey: Swift.String) async throws
+  #endif
   public func sessionKeys(data: [Swift.UInt8]) throws -> ([Swift.UInt8], [Swift.UInt8], [Swift.UInt8])
   @objc deinit
 }
@@ -776,6 +970,25 @@ public enum DecodingStrategy : Swift.Hashable {
     get
   }
 }
+extension Swift.FixedWidthInteger {
+  public var hexString: Swift.String {
+    get
+  }
+  public var bytes: [Swift.UInt8] {
+    get
+  }
+}
+extension Swift.Array where Element == Swift.UInt8 {
+  public var hexString: Swift.String {
+    get
+  }
+}
+extension Swift.Array where Element == Swift.UInt8 {
+  public init?(hexString: Swift.String)
+}
+extension Foundation.Data {
+  public init?(hexString: Swift.String)
+}
 public enum LayerType : Swift.Int, Swift.Codable {
   case precomp
   case solid
@@ -783,7 +996,7 @@ public enum LayerType : Swift.Int, Swift.Codable {
   case null
   case shape
   case text
-  public init(from decoder: Swift.Decoder) throws
+  public init(from decoder: any Swift.Decoder) throws
   public init?(rawValue: Swift.Int)
   public typealias RawValue = Swift.Int
   public var rawValue: Swift.Int {
@@ -823,19 +1036,6 @@ public enum BlendMode : Swift.Int, Swift.Codable {
   public var rawValue: Swift.Int {
     get
   }
-}
-@_inheritsConvenienceInitializers @_hasMissingDesignatedInitializers @available(iOS 13, macOS 10.15, *)
-public class COM : ICNFCCardReader.DataGroup {
-  public var version: Swift.String {
-    get
-  }
-  public var unicodeVersion: Swift.String {
-    get
-  }
-  public var dataGroupsPresent: [Swift.String] {
-    get
-  }
-  @objc deinit
 }
 extension QuartzCore.CALayer {
   @nonobjc public func logLayerTree(withIndent: Swift.Int = 0)
@@ -927,6 +1127,9 @@ extension UIKit.UIView {
 extension UIKit.UIFont {
   public static func icNFCCardReaderRegisterFont(withFilenameString filenameString: Swift.String, bundle: Foundation.Bundle)
 }
+extension UIKit.UIDevice {
+  @_Concurrency.MainActor(unsafe) public static let modelName: Swift.String
+}
 public protocol AnimationFontProvider {
   func fontFor(family: Swift.String, size: CoreFoundation.CGFloat) -> CoreText.CTFont?
 }
@@ -949,54 +1152,113 @@ final public class DefaultTextProvider : ICNFCCardReader.AnimationTextProvider {
   @objc deinit
 }
 @_inheritsConvenienceInitializers @_hasMissingDesignatedInitializers @available(iOS 13, macOS 10.15, *)
-public class NotImplementedDG : ICNFCCardReader.DataGroup {
+public class DataGroup7 : ICNFCCardReader.DataGroup {
+  public var imageData: [Swift.UInt8] {
+    get
+  }
   @objc deinit
 }
 public typealias LottieCompletionBlock = (Swift.Bool) -> Swift.Void
-public enum PACEMappingType {
-  case GM
-  case IM
-  case CAM
-  public static func == (a: ICNFCCardReader.PACEMappingType, b: ICNFCCardReader.PACEMappingType) -> Swift.Bool
-  public func hash(into hasher: inout Swift.Hasher)
-  public var hashValue: Swift.Int {
+@_inheritsConvenienceInitializers @_hasMissingDesignatedInitializers @available(iOS 13, macOS 10.15, *)
+public class DataGroup2 : ICNFCCardReader.DataGroup {
+  public var nrImages: Swift.Int {
     get
   }
-}
-@_hasMissingDesignatedInitializers @available(iOS 13, macOS 10.15, *)
-public class PACEInfo : ICNFCCardReader.SecurityInfo {
-  public static let PARAM_ID_GFP_1024_160: Swift.Int
-  public static let PARAM_ID_GFP_2048_224: Swift.Int
-  public static let PARAM_ID_GFP_2048_256: Swift.Int
-  public static let PARAM_ID_ECP_NIST_P192_R1: Swift.Int
-  public static let PARAM_ID_ECP_BRAINPOOL_P192_R1: Swift.Int
-  public static let PARAM_ID_ECP_NIST_P224_R1: Swift.Int
-  public static let PARAM_ID_ECP_BRAINPOOL_P224_R1: Swift.Int
-  public static let PARAM_ID_ECP_NIST_P256_R1: Swift.Int
-  public static let PARAM_ID_ECP_BRAINPOOL_P256_R1: Swift.Int
-  public static let PARAM_ID_ECP_BRAINPOOL_P320_R1: Swift.Int
-  public static let PARAM_ID_ECP_NIST_P384_R1: Swift.Int
-  public static let PARAM_ID_ECP_BRAINPOOL_P384_R1: Swift.Int
-  public static let PARAM_ID_ECP_BRAINPOOL_P512_R1: Swift.Int
-  public static let PARAM_ID_ECP_NIST_P521_R1: Swift.Int
-  override public func getObjectIdentifier() -> Swift.String
-  override public func getProtocolOIDString() -> Swift.String
-  public func getVersion() -> Swift.Int
-  public func getParameterId() -> Swift.Int?
-  public func getParameterSpec() throws -> Swift.Int32
-  public func getMappingType() throws -> ICNFCCardReader.PACEMappingType
-  public func getKeyAgreementAlgorithm() throws -> Swift.String
-  public func getCipherAlgorithm() throws -> Swift.String
-  public func getDigestAlgorithm() throws -> Swift.String
-  public func getKeyLength() throws -> Swift.Int
-  public func createMappingKey() throws -> Swift.OpaquePointer
-  public static func getParameterSpec(stdDomainParam: Swift.Int) throws -> Swift.Int32
-  public static func toMappingType(oid: Swift.String) throws -> ICNFCCardReader.PACEMappingType
-  public static func toKeyAgreementAlgorithm(oid: Swift.String) throws -> Swift.String
-  public static func toCipherAlgorithm(oid: Swift.String) throws -> Swift.String
-  public static func toDigestAlgorithm(oid: Swift.String) throws -> Swift.String
-  public static func toKeyLength(oid: Swift.String) throws -> Swift.Int
+  public var versionNumber: Swift.Int {
+    get
+  }
+  public var lengthOfRecord: Swift.Int {
+    get
+  }
+  public var numberOfFacialImages: Swift.Int {
+    get
+  }
+  public var facialRecordDataLength: Swift.Int {
+    get
+  }
+  public var nrFeaturePoints: Swift.Int {
+    get
+  }
+  public var gender: Swift.Int {
+    get
+  }
+  public var eyeColor: Swift.Int {
+    get
+  }
+  public var hairColor: Swift.Int {
+    get
+  }
+  public var featureMask: Swift.Int {
+    get
+  }
+  public var expression: Swift.Int {
+    get
+  }
+  public var poseAngle: Swift.Int {
+    get
+  }
+  public var poseAngleUncertainty: Swift.Int {
+    get
+  }
+  public var faceImageType: Swift.Int {
+    get
+  }
+  public var imageDataType: Swift.Int {
+    get
+  }
+  public var imageWidth: Swift.Int {
+    get
+  }
+  public var imageHeight: Swift.Int {
+    get
+  }
+  public var imageColorSpace: Swift.Int {
+    get
+  }
+  public var sourceType: Swift.Int {
+    get
+  }
+  public var deviceType: Swift.Int {
+    get
+  }
+  public var quality: Swift.Int {
+    get
+  }
+  public var imageData: [Swift.UInt8] {
+    get
+  }
   @objc deinit
+}
+extension ICNFCCardReader.BERTLV {
+  public enum Error : Foundation.LocalizedError {
+    case failedToParseHexString
+    case missingLength
+    case missingType
+    case wrongLongLength
+    case valueTooShort
+    public static func == (a: ICNFCCardReader.BERTLV.Error, b: ICNFCCardReader.BERTLV.Error) -> Swift.Bool
+    public func hash(into hasher: inout Swift.Hasher)
+    public var hashValue: Swift.Int {
+      get
+    }
+  }
+}
+public struct BERTLV : Swift.CustomStringConvertible, Swift.Equatable {
+  public let tag: Swift.UInt64
+  public let value: [Swift.UInt8]
+  public let subTags: [ICNFCCardReader.BERTLV]
+  public let isConstructed: Swift.Bool
+  public let lengthBytes: [Swift.UInt8]
+  public var rawTextValue: Swift.String? {
+    get
+  }
+  public var bytes: [Swift.UInt8] {
+    get
+  }
+  public var description: Swift.String {
+    get
+  }
+  public static func == (a: ICNFCCardReader.BERTLV, b: ICNFCCardReader.BERTLV) -> Swift.Bool
 }
 public struct Vector1D : Swift.Hashable {
   public init(_ value: Swift.Double)
@@ -1031,7 +1293,7 @@ final public class GradientValueProvider {
     get
     set
   }
-  final public var valueType: Any.Type {
+  final public var valueType: any Any.Type {
     get
   }
   final public var storage: ICNFCCardReader.ValueProviderStorage<[Swift.Double]> {
@@ -1065,8 +1327,14 @@ public enum NFCPassportReaderError : Swift.Error {
   case InvalidMRZKey
   case MoreThanOneTagFound
   case InvalidHashAlgorithmSpecified
+  case UnsupportedCipherAlgorithm
+  case UnsupportedMappingType
+  case PACEError(Swift.String, Swift.String)
+  case ChipAuthenticationFailed
   case InvalidDataPassed(Swift.String)
   case NotYetSupported(Swift.String)
+  case TagConnectionLost
+  case SystemResourceUnavailable
 }
 @available(iOS 13, macOS 10.15, *)
 extension ICNFCCardReader.NFCPassportReaderError : Foundation.LocalizedError {
@@ -1101,6 +1369,10 @@ extension ICNFCCardReader.PassiveAuthenticationError : Foundation.LocalizedError
     get
   }
 }
+@_inheritsConvenienceInitializers @_hasMissingDesignatedInitializers @available(iOS 13, macOS 10.15, *)
+public class NotImplementedDG : ICNFCCardReader.DataGroup {
+  @objc deinit
+}
 final public class FloatValueProvider {
   public init(block: @escaping ICNFCCardReader.FloatValueProvider.CGFloatValueBlock)
   public init(_ float: CoreFoundation.CGFloat)
@@ -1109,7 +1381,7 @@ final public class FloatValueProvider {
     get
     set
   }
-  final public var valueType: Any.Type {
+  final public var valueType: any Any.Type {
     get
   }
   final public var storage: ICNFCCardReader.ValueProviderStorage<ICNFCCardReader.Vector1D> {
@@ -1126,7 +1398,7 @@ final public class PointValueProvider {
     get
     set
   }
-  final public var valueType: Any.Type {
+  final public var valueType: any Any.Type {
     get
   }
   final public var storage: ICNFCCardReader.ValueProviderStorage<ICNFCCardReader.Vector3D> {
@@ -1146,11 +1418,11 @@ extension ICNFCCardReader.Animation {
   final public var size: CoreFoundation.CGSize {
     get
   }
-  public static func named(_ name: Swift.String, bundle: Foundation.Bundle = Bundle.main, subdirectory: Swift.String? = nil, animationCache: ICNFCCardReader.AnimationCacheProvider? = nil) -> ICNFCCardReader.Animation?
-  public static func filepath(_ filepath: Swift.String, animationCache: ICNFCCardReader.AnimationCacheProvider? = nil) -> ICNFCCardReader.Animation?
-  public static func asset(_ name: Swift.String, bundle: Foundation.Bundle = Bundle.main, animationCache: ICNFCCardReader.AnimationCacheProvider? = nil) -> ICNFCCardReader.Animation?
+  public static func named(_ name: Swift.String, bundle: Foundation.Bundle = Bundle.main, subdirectory: Swift.String? = nil, animationCache: (any ICNFCCardReader.AnimationCacheProvider)? = nil) -> ICNFCCardReader.Animation?
+  public static func filepath(_ filepath: Swift.String, animationCache: (any ICNFCCardReader.AnimationCacheProvider)? = nil) -> ICNFCCardReader.Animation?
+  public static func asset(_ name: Swift.String, bundle: Foundation.Bundle = Bundle.main, animationCache: (any ICNFCCardReader.AnimationCacheProvider)? = nil) -> ICNFCCardReader.Animation?
   public static func from(data: Foundation.Data, strategy: ICNFCCardReader.DecodingStrategy = LottieConfiguration.shared.decodingStrategy) throws -> ICNFCCardReader.Animation
-  public static func loadedFrom(url: Foundation.URL, closure: @escaping ICNFCCardReader.Animation.DownloadClosure, animationCache: ICNFCCardReader.AnimationCacheProvider?)
+  public static func loadedFrom(url: Foundation.URL, closure: @escaping ICNFCCardReader.Animation.DownloadClosure, animationCache: (any ICNFCCardReader.AnimationCacheProvider)?)
   final public func progressTime(forMarker named: Swift.String) -> ICNFCCardReader.AnimationProgressTime?
   final public func frameTime(forMarker named: Swift.String) -> ICNFCCardReader.AnimationFrameTime?
   final public func progressTime(forFrame frameTime: ICNFCCardReader.AnimationFrameTime, clamped: Swift.Bool = true) -> ICNFCCardReader.AnimationProgressTime
@@ -1203,35 +1475,60 @@ public func calcSHA256Hash(_ data: [Swift.UInt8]) -> [Swift.UInt8]
 public func calcSHA512Hash(_ data: [Swift.UInt8]) -> [Swift.UInt8]
 @available(iOS 13, macOS 10.15, *)
 public func calcSHA384Hash(_ data: [Swift.UInt8]) -> [Swift.UInt8]
+@_hasMissingDesignatedInitializers @available(iOS 13, macOS 10.15, *)
+public class ChipAuthenticationInfo : ICNFCCardReader.SecurityInfo {
+  override public func getObjectIdentifier() -> Swift.String
+  override public func getProtocolOIDString() -> Swift.String
+  public func getKeyId() -> Swift.Int
+  public static func toKeyAgreementAlgorithm(oid: Swift.String) throws -> Swift.String
+  public static func toCipherAlgorithm(oid: Swift.String) throws -> Swift.String
+  public static func toKeyLength(oid: Swift.String) throws -> Swift.Int
+  @objc deinit
+}
+@available(iOS 13, *)
+public enum PACEAccessKey {
+  case mrz(Swift.String)
+  case can(Swift.String)
+}
 @available(iOS 13, *)
 public class PACEHandler {
   public init(cardAccess: ICNFCCardReader.CardAccess, tagReader: ICNFCCardReader.TagReader) throws
-  public func doPACE(mrzKey: Swift.String, completed: @escaping (Swift.Bool) -> ())
+  #if compiler(>=5.3) && $AsyncAwait
+  public func doPACE(accessKey: ICNFCCardReader.PACEAccessKey) async throws
+  #endif
   @objc deinit
 }
 @_hasMissingDesignatedInitializers public class Asset : Swift.Codable {
-  required public init(from decoder: Swift.Decoder) throws
+  required public init(from decoder: any Swift.Decoder) throws
   final public let id: Swift.String
   @objc deinit
-  public func encode(to encoder: Swift.Encoder) throws
+  public func encode(to encoder: any Swift.Encoder) throws
 }
 @objc public protocol ICNFCReaderChipDelegate {
   @objc func icNFCReaderChipDismissed()
-  @objc func icNFCReaderChipCompleted(avatar: UIKit.UIImage, informationDetails: [Swift.String : Swift.String], dataGroups: [Swift.String : Swift.String])
+  @objc func icNFCReaderChipCompleted(avatar: UIKit.UIImage, informationDetails: [Swift.String : Swift.String], dataGroups: [Swift.String : Swift.String], chipAuthentication: ICNFCCardReader.ICNFCAuthenticationStatus, activeAuthentication: ICNFCCardReader.ICNFCAuthenticationStatus)
+  @objc func icNFCReadingChip(state: ICNFCCardReader.ICNFCReaderState, progress: Swift.Int, error: Swift.String, logError: [Swift.String : Swift.String])
+  @objc func icNFCPopupReaderChipDisappear()
 }
 @_inheritsConvenienceInitializers @available(iOS 13.0, *)
 @objc @_Concurrency.MainActor(unsafe) open class ICNFCReaderChipViewController : ICNFCCardReader.ICNFCBaseViewController {
-  @objc @_Concurrency.MainActor(unsafe) weak public var delegate: ICNFCCardReader.ICNFCReaderChipDelegate?
+  @objc @_Concurrency.MainActor(unsafe) public var delegate: (any ICNFCCardReader.ICNFCReaderChipDelegate)?
   @objc @_Concurrency.MainActor(unsafe) public var isShowTutorial: Swift.Bool
   @objc @_Concurrency.MainActor(unsafe) public var isEnableGotIt: Swift.Bool
-  @objc @_Concurrency.MainActor(unsafe) public var cardReaderStep: ICNFCCardReader.CardReaderStep
+  @objc @_Concurrency.MainActor(unsafe) public var readerCardMode: ICNFCCardReader.ReaderCardMode
   @objc @_Concurrency.MainActor(unsafe) public var idNumber: Swift.String
   @objc @_Concurrency.MainActor(unsafe) public var birthDate: Swift.String
   @objc @_Concurrency.MainActor(unsafe) public var expiryDate: Swift.String
   @objc @_Concurrency.MainActor(unsafe) public var nameVideoHelpNFC: Swift.String
-  @objc @_Concurrency.MainActor(unsafe) public var isTurnOffCallService: Swift.Bool
   @objc @_Concurrency.MainActor(unsafe) public var nameAnimationStatus: Swift.String
-  @objc @_Concurrency.MainActor(unsafe) public var readingTagsNFC: [Swift.Int]
+  @objc @_Concurrency.MainActor(unsafe) public var readingTagsNFC: [Swift.Int]?
+  @objc @_Concurrency.MainActor(unsafe) public var isActiveAuthentication: Swift.Bool
+  @objc @_Concurrency.MainActor(unsafe) public var isChipAuthentication: Swift.Bool
+  @objc @_Concurrency.MainActor(unsafe) public var isStartNFCReaderOutSide: Swift.Bool
+  @objc @_Concurrency.MainActor(unsafe) public var textReadyNFC: Swift.String
+  @objc @_Concurrency.MainActor(unsafe) public var textScanningNFC: Swift.String
+  @objc @_Concurrency.MainActor(unsafe) public var textFinishNFC: Swift.String
+  @objc @_Concurrency.MainActor(unsafe) public var textDetectedNFC: Swift.String
   @_Concurrency.MainActor(unsafe) @objc override dynamic open func viewDidLoad()
   @_Concurrency.MainActor(unsafe) @objc override dynamic open func viewWillAppear(_ animated: Swift.Bool)
   @_Concurrency.MainActor(unsafe) @objc override dynamic open func viewDidAppear(_ animated: Swift.Bool)
@@ -1239,22 +1536,77 @@ public class PACEHandler {
   @_Concurrency.MainActor(unsafe) @objc override dynamic open func viewDidDisappear(_ animated: Swift.Bool)
   @_Concurrency.MainActor(unsafe) @objc override dynamic open func viewWillLayoutSubviews()
   @_Concurrency.MainActor(unsafe) @objc override dynamic open func viewDidLayoutSubviews()
-  @objc @_Concurrency.MainActor(unsafe) public func startIndicatorView()
-  @objc @_Concurrency.MainActor(unsafe) public func stopIndicatorView()
   @_Concurrency.MainActor(unsafe) @objc override dynamic public init(nibName nibNameOrNil: Swift.String?, bundle nibBundleOrNil: Foundation.Bundle?)
   @_Concurrency.MainActor(unsafe) @objc required dynamic public init?(coder: Foundation.NSCoder)
   @objc deinit
 }
 @available(iOS 13.0, *)
+extension ICNFCCardReader.ICNFCReaderChipViewController {
+  @objc @_Concurrency.MainActor(unsafe) dynamic public func startIndicatorView()
+  @objc @_Concurrency.MainActor(unsafe) dynamic public func stopIndicatorView()
+  @objc @_Concurrency.MainActor(unsafe) dynamic public func readOnlySpecificDataOutSide()
+  @objc @_Concurrency.MainActor(unsafe) dynamic public func deallocSessionReaderChipNFC()
+}
+@available(iOS 13.0, *)
 extension ICNFCCardReader.ICNFCReaderChipViewController : ICNFCCardReader.ICNFCHelpFullScreenVideosDelegate {
-  @_Concurrency.MainActor(unsafe) @objc dynamic public func pressButtonSkipICNFCHelpFullScreenVideos()
+  @_Concurrency.MainActor(unsafe) @objc dynamic public func icNFCHelpFullScreenVideosGotIt()
+}
+@available(iOS 13.0, *)
+extension ICNFCCardReader.ICNFCReaderChipViewController : ICNFCCardReader.ICPopupCloseSdkDelegate {
+  @_Concurrency.MainActor(unsafe) @objc dynamic public func icPopupCloseSdkPressedLeft()
+  @_Concurrency.MainActor(unsafe) @objc dynamic public func icPopupCloseSdkPressedRight()
 }
 @available(iOS 13.0, *)
 extension ICNFCCardReader.ICNFCReaderChipViewController : ICNFCCardReader.PassportReaderDelegate {
-  @_Concurrency.MainActor(unsafe) public func passportReaderSessionDidBecomeActive(_ session: CoreNFC.NFCTagReaderSession)
-  @_Concurrency.MainActor(unsafe) public func passportReaderIdInvalidate(_ session: CoreNFC.NFCTagReaderSession, didInvalidateWithError error: Swift.Error)
+  @_Concurrency.MainActor(unsafe) public func passportReaderSessionDidBecomeActive(_ session: CoreNFC.NFCTagReaderSession, timeout: Swift.Int)
+  @_Concurrency.MainActor(unsafe) public func passportReaderIdInvalidate(_ session: CoreNFC.NFCTagReaderSession, didInvalidateWithError error: any Swift.Error)
   @_Concurrency.MainActor(unsafe) public func passportReaderSessionDidDetect(_ session: CoreNFC.NFCTagReaderSession, didDetect tags: [CoreNFC.NFCTag])
-  @_Concurrency.MainActor(unsafe) public func passportReaderReadingProgress(progress: Swift.Int)
+  @_Concurrency.MainActor(unsafe) public func passportReaderReadingProgress(dgId: ICNFCCardReader.DataGroupId, progress: Swift.Int)
+}
+public enum PACEMappingType {
+  case GM
+  case IM
+  case CAM
+  public static func == (a: ICNFCCardReader.PACEMappingType, b: ICNFCCardReader.PACEMappingType) -> Swift.Bool
+  public func hash(into hasher: inout Swift.Hasher)
+  public var hashValue: Swift.Int {
+    get
+  }
+}
+@_hasMissingDesignatedInitializers @available(iOS 13, macOS 10.15, *)
+public class PACEInfo : ICNFCCardReader.SecurityInfo {
+  public static let PARAM_ID_GFP_1024_160: Swift.Int
+  public static let PARAM_ID_GFP_2048_224: Swift.Int
+  public static let PARAM_ID_GFP_2048_256: Swift.Int
+  public static let PARAM_ID_ECP_NIST_P192_R1: Swift.Int
+  public static let PARAM_ID_ECP_BRAINPOOL_P192_R1: Swift.Int
+  public static let PARAM_ID_ECP_NIST_P224_R1: Swift.Int
+  public static let PARAM_ID_ECP_BRAINPOOL_P224_R1: Swift.Int
+  public static let PARAM_ID_ECP_NIST_P256_R1: Swift.Int
+  public static let PARAM_ID_ECP_BRAINPOOL_P256_R1: Swift.Int
+  public static let PARAM_ID_ECP_BRAINPOOL_P320_R1: Swift.Int
+  public static let PARAM_ID_ECP_NIST_P384_R1: Swift.Int
+  public static let PARAM_ID_ECP_BRAINPOOL_P384_R1: Swift.Int
+  public static let PARAM_ID_ECP_BRAINPOOL_P512_R1: Swift.Int
+  public static let PARAM_ID_ECP_NIST_P521_R1: Swift.Int
+  override public func getObjectIdentifier() -> Swift.String
+  override public func getProtocolOIDString() -> Swift.String
+  public func getVersion() -> Swift.Int
+  public func getParameterId() -> Swift.Int?
+  public func getParameterSpec() throws -> Swift.Int32
+  public func getMappingType() throws -> ICNFCCardReader.PACEMappingType
+  public func getKeyAgreementAlgorithm() throws -> Swift.String
+  public func getCipherAlgorithm() throws -> Swift.String
+  public func getDigestAlgorithm() throws -> Swift.String
+  public func getKeyLength() throws -> Swift.Int
+  public func createMappingKey() throws -> Swift.OpaquePointer
+  public static func getParameterSpec(stdDomainParam: Swift.Int) throws -> Swift.Int32
+  public static func toMappingType(oid: Swift.String) throws -> ICNFCCardReader.PACEMappingType
+  public static func toKeyAgreementAlgorithm(oid: Swift.String) throws -> Swift.String
+  public static func toCipherAlgorithm(oid: Swift.String) throws -> Swift.String
+  public static func toDigestAlgorithm(oid: Swift.String) throws -> Swift.String
+  public static func toKeyLength(oid: Swift.String) throws -> Swift.Int
+  @objc deinit
 }
 @available(iOS 13, macOS 10.15, *)
 public class ASN1Item : Swift.CustomDebugStringConvertible {
@@ -1264,6 +1616,7 @@ public class ASN1Item : Swift.CustomDebugStringConvertible {
   public var debugDescription: Swift.String {
     get
   }
+  public func clearData()
   @objc deinit
 }
 @available(iOS 13, macOS 10.15, *)
@@ -1275,6 +1628,13 @@ public class SimpleASN1DumpParser {
 }
 public typealias AnimationFrameTime = CoreFoundation.CGFloat
 public typealias AnimationProgressTime = CoreFoundation.CGFloat
+@_inheritsConvenienceInitializers @_hasMissingDesignatedInitializers @available(iOS 13, macOS 10.15, *)
+public class DataGroup14 : ICNFCCardReader.DataGroup {
+  public var securityInfos: [ICNFCCardReader.SecurityInfo] {
+    get
+  }
+  @objc deinit
+}
 @objc @_inheritsConvenienceInitializers @_Concurrency.MainActor(unsafe) final public class AnimationSubview : UIKit.UIView {
   @_Concurrency.MainActor(unsafe) @objc override dynamic public init(frame: CoreFoundation.CGRect)
   @_Concurrency.MainActor(unsafe) @objc required dynamic public init?(coder: Foundation.NSCoder)
@@ -1283,8 +1643,8 @@ public typealias AnimationProgressTime = CoreFoundation.CGFloat
 infix operator +| : DefaultPrecedence
 infix operator +- : DefaultPrecedence
 extension ICNFCCardReader.Color : Swift.Codable {
-  public init(from decoder: Swift.Decoder) throws
-  public func encode(to encoder: Swift.Encoder) throws
+  public init(from decoder: any Swift.Decoder) throws
+  public func encode(to encoder: any Swift.Encoder) throws
 }
 @available(iOS 13, macOS 10.15, *)
 public enum CertificateType {
@@ -1372,7 +1732,7 @@ extension ICNFCCardReader.LottieLogger {
   @objc func qrScanningDidStop()
 }
 @_inheritsConvenienceInitializers @_hasMissingDesignatedInitializers @objc @_Concurrency.MainActor(unsafe) public class ICNFCQRCodeScannerView : UIKit.UIView {
-  @objc @_Concurrency.MainActor(unsafe) weak public var delegate: ICNFCCardReader.ICNFCQRCodeScannerViewDelegate?
+  @objc @_Concurrency.MainActor(unsafe) weak public var delegate: (any ICNFCCardReader.ICNFCQRCodeScannerViewDelegate)?
   @objc @_Concurrency.MainActor(unsafe) public var captureSession: AVFoundation.AVCaptureSession!
   @_Concurrency.MainActor(unsafe) @objc override dynamic public class var layerClass: Swift.AnyClass {
     @objc get
@@ -1400,8 +1760,15 @@ extension ICNFCCardReader.ICNFCQRCodeScannerView : AVFoundation.AVCaptureMetadat
 extension ICNFCCardReader.ICNFCQRCodeScannerView : AVFoundation.AVCaptureVideoDataOutputSampleBufferDelegate {
   @_Concurrency.MainActor(unsafe) @objc dynamic public func captureOutput(_ output: AVFoundation.AVCaptureOutput, didOutput sampleBuffer: CoreMedia.CMSampleBuffer, from connection: AVFoundation.AVCaptureConnection)
 }
+@_hasMissingDesignatedInitializers @available(iOS 13, macOS 10.15, *)
+public class CardAccess {
+  public var securityInfos: [ICNFCCardReader.SecurityInfo] {
+    get
+  }
+  @objc deinit
+}
 public protocol AnyValueProvider {
-  var valueType: Any.Type { get }
+  var valueType: any Any.Type { get }
   var typeErasedStorage: ICNFCCardReader.AnyValueProviderStorage { get }
   func hasUpdate(frame: ICNFCCardReader.AnimationFrameTime) -> Swift.Bool
 }
@@ -1418,46 +1785,6 @@ public enum AnyValueProviderStorage {
   case keyframes([ICNFCCardReader.Keyframe<Any>], interpolate: (ICNFCCardReader.AnimationFrameTime) -> Any)
   case closure((ICNFCCardReader.AnimationFrameTime) -> Any)
 }
-@_inheritsConvenienceInitializers @_hasMissingDesignatedInitializers @available(iOS 13, macOS 10.15, *)
-public class DataGroup11 : ICNFCCardReader.DataGroup {
-  public var fullName: Swift.String? {
-    get
-  }
-  public var personalNumber: Swift.String? {
-    get
-  }
-  public var dateOfBirth: Swift.String? {
-    get
-  }
-  public var placeOfBirth: Swift.String? {
-    get
-  }
-  public var address: Swift.String? {
-    get
-  }
-  public var telephone: Swift.String? {
-    get
-  }
-  public var profession: Swift.String? {
-    get
-  }
-  public var title: Swift.String? {
-    get
-  }
-  public var personalSummary: Swift.String? {
-    get
-  }
-  public var proofOfCitizenship: Swift.String? {
-    get
-  }
-  public var tdNumbers: Swift.String? {
-    get
-  }
-  public var custodyInfo: Swift.String? {
-    get
-  }
-  @objc deinit
-}
 public class LRUAnimationCache : ICNFCCardReader.AnimationCacheProvider {
   public init()
   public static let sharedCache: ICNFCCardReader.LRUAnimationCache
@@ -1467,89 +1794,42 @@ public class LRUAnimationCache : ICNFCCardReader.AnimationCacheProvider {
   public func setAnimation(_ animation: ICNFCCardReader.Animation, forKey: Swift.String)
   @objc deinit
 }
-@_inheritsConvenienceInitializers @_hasMissingDesignatedInitializers @available(iOS 13, macOS 10.15, *)
-public class DataGroup2 : ICNFCCardReader.DataGroup {
-  public var nrImages: Swift.Int {
-    get
-  }
-  public var versionNumber: Swift.Int {
-    get
-  }
-  public var lengthOfRecord: Swift.Int {
-    get
-  }
-  public var numberOfFacialImages: Swift.Int {
-    get
-  }
-  public var facialRecordDataLength: Swift.Int {
-    get
-  }
-  public var nrFeaturePoints: Swift.Int {
-    get
-  }
-  public var gender: Swift.Int {
-    get
-  }
-  public var eyeColor: Swift.Int {
-    get
-  }
-  public var hairColor: Swift.Int {
-    get
-  }
-  public var featureMask: Swift.Int {
-    get
-  }
-  public var expression: Swift.Int {
-    get
-  }
-  public var poseAngle: Swift.Int {
-    get
-  }
-  public var poseAngleUncertainty: Swift.Int {
-    get
-  }
-  public var faceImageType: Swift.Int {
-    get
-  }
-  public var imageDataType: Swift.Int {
-    get
-  }
-  public var imageWidth: Swift.Int {
-    get
-  }
-  public var imageHeight: Swift.Int {
-    get
-  }
-  public var imageColorSpace: Swift.Int {
-    get
-  }
-  public var sourceType: Swift.Int {
-    get
-  }
-  public var deviceType: Swift.Int {
-    get
-  }
-  public var quality: Swift.Int {
-    get
-  }
-  public var imageData: [Swift.UInt8] {
-    get
-  }
-  @objc deinit
-}
-@_inheritsConvenienceInitializers @_hasMissingDesignatedInitializers @available(iOS 13, macOS 10.15, *)
-public class DataGroup14 : ICNFCCardReader.DataGroup {
-  public var securityInfos: [ICNFCCardReader.SecurityInfo] {
-    get
-  }
-  @objc deinit
-}
 extension ICNFCCardReader.AnimationView {
-  @_Concurrency.MainActor(unsafe) convenience public init(name: Swift.String, bundle: Foundation.Bundle = Bundle.main, imageProvider: ICNFCCardReader.AnimationImageProvider? = nil, animationCache: ICNFCCardReader.AnimationCacheProvider? = LRUAnimationCache.sharedCache, configuration: ICNFCCardReader.LottieConfiguration = .shared)
-  @_Concurrency.MainActor(unsafe) convenience public init(filePath: Swift.String, imageProvider: ICNFCCardReader.AnimationImageProvider? = nil, animationCache: ICNFCCardReader.AnimationCacheProvider? = LRUAnimationCache.sharedCache, configuration: ICNFCCardReader.LottieConfiguration = .shared)
-  @_Concurrency.MainActor(unsafe) convenience public init(url: Foundation.URL, imageProvider: ICNFCCardReader.AnimationImageProvider? = nil, closure: @escaping ICNFCCardReader.AnimationView.DownloadClosure, animationCache: ICNFCCardReader.AnimationCacheProvider? = LRUAnimationCache.sharedCache, configuration: ICNFCCardReader.LottieConfiguration = .shared)
-  @_Concurrency.MainActor(unsafe) convenience public init(asset name: Swift.String, bundle: Foundation.Bundle = Bundle.main, imageProvider: ICNFCCardReader.AnimationImageProvider? = nil, animationCache: ICNFCCardReader.AnimationCacheProvider? = LRUAnimationCache.sharedCache, configuration: ICNFCCardReader.LottieConfiguration = .shared)
-  public typealias DownloadClosure = (Swift.Error?) -> Swift.Void
+  @_Concurrency.MainActor(unsafe) convenience public init(name: Swift.String, bundle: Foundation.Bundle = Bundle.main, imageProvider: (any ICNFCCardReader.AnimationImageProvider)? = nil, animationCache: (any ICNFCCardReader.AnimationCacheProvider)? = LRUAnimationCache.sharedCache, configuration: ICNFCCardReader.LottieConfiguration = .shared)
+  @_Concurrency.MainActor(unsafe) convenience public init(filePath: Swift.String, imageProvider: (any ICNFCCardReader.AnimationImageProvider)? = nil, animationCache: (any ICNFCCardReader.AnimationCacheProvider)? = LRUAnimationCache.sharedCache, configuration: ICNFCCardReader.LottieConfiguration = .shared)
+  @_Concurrency.MainActor(unsafe) convenience public init(url: Foundation.URL, imageProvider: (any ICNFCCardReader.AnimationImageProvider)? = nil, closure: @escaping ICNFCCardReader.AnimationView.DownloadClosure, animationCache: (any ICNFCCardReader.AnimationCacheProvider)? = LRUAnimationCache.sharedCache, configuration: ICNFCCardReader.LottieConfiguration = .shared)
+  @_Concurrency.MainActor(unsafe) convenience public init(asset name: Swift.String, bundle: Foundation.Bundle = Bundle.main, imageProvider: (any ICNFCCardReader.AnimationImageProvider)? = nil, animationCache: (any ICNFCCardReader.AnimationCacheProvider)? = LRUAnimationCache.sharedCache, configuration: ICNFCCardReader.LottieConfiguration = .shared)
+  public typealias DownloadClosure = ((any Swift.Error)?) -> Swift.Void
+}
+@available(iOS 13, macOS 10.15, *)
+public enum DocTypeEnum : Swift.String {
+  case TD1
+  case TD2
+  case OTHER
+  public init?(rawValue: Swift.String)
+  public typealias RawValue = Swift.String
+  public var rawValue: Swift.String {
+    get
+  }
+}
+@_inheritsConvenienceInitializers @_hasMissingDesignatedInitializers @available(iOS 13, macOS 10.15, *)
+public class DataGroup1 : ICNFCCardReader.DataGroup {
+  public var elements: [Swift.String : Swift.String] {
+    get
+  }
+  @objc deinit
+}
+@_hasMissingDesignatedInitializers @available(iOS 13, macOS 10.15, *)
+public class DataGroup {
+  public var datagroupType: ICNFCCardReader.DataGroupId
+  public var body: [Swift.UInt8] {
+    get
+  }
+  public var data: [Swift.UInt8] {
+    get
+  }
+  public func hash(_ hashAlgorythm: Swift.String) -> [Swift.UInt8]
+  @objc deinit
 }
 @objc @_Concurrency.MainActor(unsafe) open class AnimatedControl : UIKit.UIControl {
   @_Concurrency.MainActor(unsafe) public init(animation: ICNFCCardReader.Animation, configuration: ICNFCCardReader.LottieConfiguration = .shared)
@@ -1585,7 +1865,20 @@ extension ICNFCCardReader.AnimationView {
     set
   }
   @_Concurrency.MainActor(unsafe) public func setLayer(named: Swift.String, forState: UIKit.UIControl.State)
-  @_Concurrency.MainActor(unsafe) public func setValueProvider(_ valueProvider: ICNFCCardReader.AnyValueProvider, keypath: ICNFCCardReader.AnimationKeypath)
+  @_Concurrency.MainActor(unsafe) public func setValueProvider(_ valueProvider: any ICNFCCardReader.AnyValueProvider, keypath: ICNFCCardReader.AnimationKeypath)
+  @objc deinit
+}
+@_hasMissingDesignatedInitializers @available(iOS 13, macOS 10.15, *)
+public class ActiveAuthenticationInfo : ICNFCCardReader.SecurityInfo {
+  override public func getObjectIdentifier() -> Swift.String
+  override public func getProtocolOIDString() -> Swift.String
+  public func getSignatureAlgorithmOIDString() -> Swift.String?
+  @objc deinit
+}
+public class QKMRZParser {
+  public init(ocrCorrection: Swift.Bool = false)
+  public func parse(mrzLines: [Swift.String]) -> ICNFCCardReader.QKMRZResult?
+  public func parse(mrzString: Swift.String) -> ICNFCCardReader.QKMRZResult?
   @objc deinit
 }
 public class FilepathImageProvider : ICNFCCardReader.AnimationImageProvider {
@@ -1594,16 +1887,12 @@ public class FilepathImageProvider : ICNFCCardReader.AnimationImageProvider {
   public func imageForAsset(asset: ICNFCCardReader.ImageAsset) -> CoreGraphics.CGImage?
   @objc deinit
 }
-@_hasMissingDesignatedInitializers @available(iOS 13, macOS 10.15, *)
-public class DataGroup {
-  public var datagroupType: ICNFCCardReader.DataGroupId
-  public var body: [Swift.UInt8] {
-    get
-  }
-  public var data: [Swift.UInt8] {
-    get
-  }
-  public func hash(_ hashAlgorythm: Swift.String) -> [Swift.UInt8]
+@objc @_inheritsConvenienceInitializers @objcMembers public class ICNFCConstant : ObjectiveC.NSObject {
+  @objc public static let FontRegular: Swift.String
+  @objc public static let FontMedium: Swift.String
+  @objc public static let FontBold: Swift.String
+  @objc public static let IsIpad: (Swift.Bool)
+  @objc override dynamic public init()
   @objc deinit
 }
 final public class SizeValueProvider {
@@ -1614,7 +1903,7 @@ final public class SizeValueProvider {
     get
     set
   }
-  final public var valueType: Any.Type {
+  final public var valueType: any Any.Type {
     get
   }
   final public var storage: ICNFCCardReader.ValueProviderStorage<ICNFCCardReader.Vector3D> {
@@ -1622,6 +1911,39 @@ final public class SizeValueProvider {
   }
   final public func hasUpdate(frame _: CoreFoundation.CGFloat) -> Swift.Bool
   @objc deinit
+}
+@available(iOS 13, macOS 10.15, *)
+public enum DataGroupId : Swift.Int, Swift.CaseIterable {
+  case COM
+  case DG1
+  case DG2
+  case DG3
+  case DG4
+  case DG5
+  case DG6
+  case DG7
+  case DG8
+  case DG9
+  case DG10
+  case DG11
+  case DG12
+  case DG13
+  case DG14
+  case DG15
+  case DG16
+  case SOD
+  case Unknown
+  public func getName() -> Swift.String
+  public static func getIDFromName(name: Swift.String) -> ICNFCCardReader.DataGroupId
+  public init?(rawValue: Swift.Int)
+  public typealias AllCases = [ICNFCCardReader.DataGroupId]
+  public typealias RawValue = Swift.Int
+  public static var allCases: [ICNFCCardReader.DataGroupId] {
+    get
+  }
+  public var rawValue: Swift.Int {
+    get
+  }
 }
 final public class ColorValueProvider {
   public init(block: @escaping ICNFCCardReader.ColorValueProvider.ColorValueBlock)
@@ -1632,7 +1954,7 @@ final public class ColorValueProvider {
     get
     set
   }
-  final public var valueType: Any.Type {
+  final public var valueType: any Any.Type {
     get
   }
   final public var storage: ICNFCCardReader.ValueProviderStorage<ICNFCCardReader.Color> {
@@ -1647,12 +1969,6 @@ public class TagReader {
 }
 extension ICNFCCardReader.SecureMessagingSupportedAlgorithms : Swift.Equatable {}
 extension ICNFCCardReader.SecureMessagingSupportedAlgorithms : Swift.Hashable {}
-@available(iOS 13, macOS 10.15, *)
-extension ICNFCCardReader.DocTypeEnum : Swift.Equatable {}
-@available(iOS 13, macOS 10.15, *)
-extension ICNFCCardReader.DocTypeEnum : Swift.Hashable {}
-@available(iOS 13, macOS 10.15, *)
-extension ICNFCCardReader.DocTypeEnum : Swift.RawRepresentable {}
 extension ICNFCCardReader.CoordinateSpace : Swift.Equatable {}
 extension ICNFCCardReader.CoordinateSpace : Swift.Hashable {}
 extension ICNFCCardReader.CoordinateSpace : Swift.RawRepresentable {}
@@ -1660,12 +1976,6 @@ extension ICNFCCardReader.LottieBackgroundBehavior : Swift.Equatable {}
 extension ICNFCCardReader.LottieBackgroundBehavior : Swift.Hashable {}
 extension ICNFCCardReader.AnimatedSwitch.CancelBehavior : Swift.Equatable {}
 extension ICNFCCardReader.AnimatedSwitch.CancelBehavior : Swift.Hashable {}
-@available(iOS 13, macOS 10.15, *)
-extension ICNFCCardReader.DataGroupId : Swift.Equatable {}
-@available(iOS 13, macOS 10.15, *)
-extension ICNFCCardReader.DataGroupId : Swift.Hashable {}
-@available(iOS 13, macOS 10.15, *)
-extension ICNFCCardReader.DataGroupId : Swift.RawRepresentable {}
 extension ICNFCCardReader.PassportAuthenticationStatus : Swift.Equatable {}
 extension ICNFCCardReader.PassportAuthenticationStatus : Swift.Hashable {}
 extension ICNFCCardReader.LogLevel : Swift.Equatable {}
@@ -1680,11 +1990,13 @@ extension ICNFCCardReader.MatteType : Swift.RawRepresentable {}
 extension ICNFCCardReader.BlendMode : Swift.Equatable {}
 extension ICNFCCardReader.BlendMode : Swift.Hashable {}
 extension ICNFCCardReader.BlendMode : Swift.RawRepresentable {}
-extension ICNFCCardReader.PACEMappingType : Swift.Equatable {}
-extension ICNFCCardReader.PACEMappingType : Swift.Hashable {}
+extension ICNFCCardReader.BERTLV.Error : Swift.Equatable {}
+extension ICNFCCardReader.BERTLV.Error : Swift.Hashable {}
 extension ICNFCCardReader.GradientValueProvider : ICNFCCardReader.AnyValueProvider {}
 extension ICNFCCardReader.FloatValueProvider : ICNFCCardReader.AnyValueProvider {}
 extension ICNFCCardReader.PointValueProvider : ICNFCCardReader.AnyValueProvider {}
+extension ICNFCCardReader.PACEMappingType : Swift.Equatable {}
+extension ICNFCCardReader.PACEMappingType : Swift.Hashable {}
 @available(iOS 13, macOS 10.15, *)
 extension ICNFCCardReader.CertificateType : Swift.Equatable {}
 @available(iOS 13, macOS 10.15, *)
@@ -1695,5 +2007,17 @@ extension ICNFCCardReader.CertificateItem : Swift.Equatable {}
 extension ICNFCCardReader.CertificateItem : Swift.Hashable {}
 @available(iOS 13, macOS 10.15, *)
 extension ICNFCCardReader.CertificateItem : Swift.RawRepresentable {}
+@available(iOS 13, macOS 10.15, *)
+extension ICNFCCardReader.DocTypeEnum : Swift.Equatable {}
+@available(iOS 13, macOS 10.15, *)
+extension ICNFCCardReader.DocTypeEnum : Swift.Hashable {}
+@available(iOS 13, macOS 10.15, *)
+extension ICNFCCardReader.DocTypeEnum : Swift.RawRepresentable {}
 extension ICNFCCardReader.SizeValueProvider : ICNFCCardReader.AnyValueProvider {}
+@available(iOS 13, macOS 10.15, *)
+extension ICNFCCardReader.DataGroupId : Swift.Equatable {}
+@available(iOS 13, macOS 10.15, *)
+extension ICNFCCardReader.DataGroupId : Swift.Hashable {}
+@available(iOS 13, macOS 10.15, *)
+extension ICNFCCardReader.DataGroupId : Swift.RawRepresentable {}
 extension ICNFCCardReader.ColorValueProvider : ICNFCCardReader.AnyValueProvider {}
