@@ -21,9 +21,9 @@ class _EkycNfcScreenState extends State<EkycNfcScreen> {
 
   @override
   void initState() {
-    _textIdController = TextEditingController();
-    _textDobController = TextEditingController();
-    _textExpireController = TextEditingController();
+    _textIdController = TextEditingController(text: '030201008790');
+    _textDobController = TextEditingController(text: '010211');
+    _textExpireController = TextEditingController(text: '260211');
     super.initState();
   }
 
@@ -75,11 +75,26 @@ class _EkycNfcScreenState extends State<EkycNfcScreen> {
   }
 
   Future<Map<String, dynamic>> _onlyNfcWithUi() async {
+    final id = _textIdController.text.trim();
+    final dob = _textDobController.text.trim();
+    final exp = _textExpireController.text.trim();
+
+    if (id.isEmpty || dob.isEmpty || exp.isEmpty) {
+      _showError(
+          'Thiếu thông tin, Vui lòng nhập Số thẻ, Ngày sinh, Ngày hết hạn');
+      return {};
+    }
+    if (id.length != 12 || dob.length != 6 || exp.length != 6) {
+      _showError(
+          'Định dạng không hợp lệ, Số thẻ 12 số, ngày sinh và hết hạn YYMMDD');
+      return {};
+    }
+
     try {
       final config = NfcPresets.manualWithUi(
-        idNumber: _textIdController.text.trim(),
-        birthday: _textDobController.text.trim(),
-        expiredDate: _textExpireController.text.trim(),
+        idNumber: id,
+        birthday: dob,
+        expiredDate: exp,
       );
       final json = await _nfcService.startOnlyNfc(config);
       return json.isEmpty ? {} : _parseResult(json);
@@ -90,11 +105,26 @@ class _EkycNfcScreenState extends State<EkycNfcScreen> {
   }
 
   Future<Map<String, dynamic>> _onlyNfcWithoutUi() async {
+    final id = _textIdController.text.trim();
+    final dob = _textDobController.text.trim();
+    final exp = _textExpireController.text.trim();
+
+    if (id.isEmpty || dob.isEmpty || exp.isEmpty) {
+      _showError(
+          'Thiếu thông tin, Vui lòng nhập Số thẻ, Ngày sinh, Ngày hết hạn');
+      return {};
+    }
+    if (id.length != 12 || dob.length != 6 || exp.length != 6) {
+      _showError(
+          'Định dạng không hợp lệ, Số thẻ 12 số, ngày sinh và hết hạn YYMMDD');
+      return {};
+    }
+
     try {
       final config = NfcPresets.manualWithoutUi(
-        idNumber: _textIdController.text.trim(),
-        birthday: _textDobController.text.trim(),
-        expiredDate: _textExpireController.text.trim(),
+        idNumber: id,
+        birthday: dob,
+        expiredDate: exp,
       );
       final json = await _nfcService.startOnlyNfcWithoutUi(config);
       return json.isEmpty ? {} : _parseResult(json);
@@ -105,8 +135,23 @@ class _EkycNfcScreenState extends State<EkycNfcScreen> {
   }
 
   void _showError(String? message) {
-    final snackBar = SnackBar(content: Text(message ?? 'Có lỗi xảy ra'));
-    ScaffoldMessenger.of(context).showSnackBar(snackBar);
+    ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(
+        content: Text(message ?? 'Có lỗi xảy ra'),
+        backgroundColor: Theme.of(context).colorScheme.error,
+        duration: const Duration(seconds: 1),
+      ),
+    );
+  }
+
+  void _showToast(String title, String message) {
+    ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(
+        content: Text(message),
+        duration: const Duration(seconds: 1),
+        backgroundColor: Theme.of(context).colorScheme.primary,
+      ),
+    );
   }
 
   @override

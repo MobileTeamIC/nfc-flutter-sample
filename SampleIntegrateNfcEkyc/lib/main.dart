@@ -13,9 +13,9 @@ class EkycNfcApp extends StatelessWidget {
   // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
-    final lightScheme = ShadColorScheme.fromName('blue');
+    final lightScheme = ShadColorScheme.fromName('green');
     final darkScheme =
-        ShadColorScheme.fromName('slate', brightness: Brightness.dark);
+        ShadColorScheme.fromName('green', brightness: Brightness.dark);
 
     return ShadApp(
       title: 'Ekyc NFC',
@@ -28,7 +28,12 @@ class EkycNfcApp extends StatelessWidget {
         brightness: Brightness.dark,
         colorScheme: darkScheme,
       ),
-      home: const EkycNfcScreen(),
+      home: GestureDetector(
+        onTap: () => FocusScope.of(context).unfocus(),
+        child: const ScaffoldMessenger(
+          child: EkycNfcScreen(),
+        ),
+      ),
     );
   }
 }

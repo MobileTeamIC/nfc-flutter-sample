@@ -630,7 +630,7 @@ import ICNFCCardReader
             
             
             // Thực hiện gọi phương thức đọc thông tin thẻ căn cước gắn chip bằng công nghệ NFC
-            // objICMainNFCReader.startNFCReaderOutSide()
+            objICMainNFCReader.startNFCReaderOutSide()
         } else {
             debugPrint("Fallback on earlier versions")
         }
@@ -670,7 +670,7 @@ extension AppDelegate: ICMainNFCReaderDelegate {
         var dataNFCResult = ""
         do {
             let jsonData = try JSONSerialization.data(withJSONObject: ICNFCSaveData.shared().dataNFCResult, options: .prettyPrinted)
-            dataNFCResult = String(data: jsonData, encoding: .ascii) ?? ""
+            dataNFCResult = String(data: jsonData, encoding: .utf8) ?? ""
         } catch {
             print(error.localizedDescription)
         }
@@ -678,7 +678,7 @@ extension AppDelegate: ICMainNFCReaderDelegate {
         var postcodePlaceOfOriginResult = ""
         do {
             let jsonData = try JSONSerialization.data(withJSONObject: ICNFCSaveData.shared().postcodeOriginalLocationResult, options: .prettyPrinted)
-            postcodePlaceOfOriginResult = String(data: jsonData, encoding: .ascii) ?? ""
+            postcodePlaceOfOriginResult = String(data: jsonData, encoding: .utf8) ?? ""
         } catch {
             print(error.localizedDescription)
         }
@@ -686,7 +686,7 @@ extension AppDelegate: ICMainNFCReaderDelegate {
         var postcodePlaceOfResidenceResult = ""
         do {
             let jsonData = try JSONSerialization.data(withJSONObject: ICNFCSaveData.shared().postcodeRecentLocationResult, options: .prettyPrinted)
-            postcodePlaceOfResidenceResult = String(data: jsonData, encoding: .ascii) ?? ""
+            postcodePlaceOfResidenceResult = String(data: jsonData, encoding: .utf8) ?? ""
         } catch {
             print(error.localizedDescription)
         }
@@ -708,7 +708,7 @@ extension AppDelegate: ICMainNFCReaderDelegate {
         
         do {
             let jsonData = try JSONSerialization.data(withJSONObject: dict, options: .prettyPrinted)
-            let jsonString = String(data: jsonData, encoding: String.Encoding.ascii)
+            let jsonString = String(data: jsonData, encoding: String.Encoding.utf8)
             self.methodChannel!(jsonString)
             
         } catch {
