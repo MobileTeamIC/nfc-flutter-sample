@@ -5,6 +5,7 @@ import 'package:shadcn_ui/shadcn_ui.dart';
 import 'log_screen.dart';
 import 'services/nfc_method_channel.dart';
 import 'services/nfc_presentation.dart';
+import 'package:flutter_dotenv/flutter_dotenv.dart';
 
 class EkycNfcScreen extends StatefulWidget {
   const EkycNfcScreen({super.key});
@@ -21,9 +22,12 @@ class _EkycNfcScreenState extends State<EkycNfcScreen> {
 
   @override
   void initState() {
-    _textIdController = TextEditingController(text: '030201008790');
-    _textDobController = TextEditingController(text: '010211');
-    _textExpireController = TextEditingController(text: '260211');
+    _textIdController =
+        TextEditingController(text: dotenv.env['ID_NUMBER'] ?? '030201008790');
+    _textDobController =
+        TextEditingController(text: dotenv.env['DOB'] ?? '010211');
+    _textExpireController =
+        TextEditingController(text: dotenv.env['EXPIRE'] ?? '260211');
     super.initState();
   }
 

@@ -46,6 +46,7 @@ import ICNFCCardReader
            })
        }
     
+    //MARK: - QR and NFC
     // Thực hiện quét mã QR và đọc thông tin thẻ Căn cước NFC
     private func actionOpenQRAndNFC(_ controller: UIViewController) {
             // Chức năng đọc thông tin thẻ chip bằng NFC, từ iOS 13.0 trở lên
@@ -207,7 +208,7 @@ import ICNFCCardReader
     
     }
     
-
+    //MARK: - MRZ_NFC
     // Thực hiện quét mã MRZ và đọc thông tin thẻ Căn cước NFC
     private func actionStart_MRZ_NFC(_ controller: UIViewController) {
         
@@ -371,6 +372,7 @@ import ICNFCCardReader
         }
     }
 
+    //MARK: - ONLY_NFC
       // Truyền thông tin và mở SDK để đọc thông tin thẻ Căn cước
      private func actionStart_Only_NFC(_ controller: UIViewController, args: [String: Any]) {
         
