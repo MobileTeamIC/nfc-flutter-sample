@@ -98,7 +98,7 @@
 			isa = PBXGroup;
 			children = (
 				D23497862A42F4520061717A /* Runner.entitlements */,
-				D23497812A42F0E30061717A /* Sdks */,
+				D23497812A42F0E30061717A /* SDK */,
 				97C146FA1CF9000F007C117D /* Main.storyboard */,
 				97C146FD1CF9000F007C117D /* Assets.xcassets */,
 				97C146FF1CF9000F007C117D /* LaunchScreen.storyboard */,
@@ -111,13 +111,13 @@
 			path = Runner;
 			sourceTree = "<group>";
 		};
-		D23497812A42F0E30061717A /* Sdks */ = {
+		D23497812A42F0E30061717A /* SDK */ = {
 			isa = PBXGroup;
 			children = (
 				D23497872A42F5C60061717A /* OpenSSL.xcframework */,
 				D23497822A42F0E30061717A /* ICNFCCardReader.xcframework */,
 			);
-			path = Sdks;
+			path = SDK;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
