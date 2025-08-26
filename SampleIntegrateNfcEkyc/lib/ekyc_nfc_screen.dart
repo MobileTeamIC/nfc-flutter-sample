@@ -143,7 +143,7 @@ class _EkycNfcScreenState extends State<EkycNfcScreen> {
       SnackBar(
         content: Text(message ?? 'Có lỗi xảy ra'),
         backgroundColor: Theme.of(context).colorScheme.error,
-        duration: const Duration(seconds: 1),
+        duration: const Duration(seconds: 3),
       ),
     );
   }

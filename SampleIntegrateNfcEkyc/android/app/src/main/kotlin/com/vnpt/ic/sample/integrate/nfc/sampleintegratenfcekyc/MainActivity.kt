@@ -27,30 +27,32 @@ class MainActivity : FlutterActivity(), MethodChannel.MethodCallHandler {
       // Thực hiện quét thẻ Căn cước NFC
       fun navigateToOnlyNFC(ctx: Context, json: JSONObject): Intent {
          return Intent(ctx, VnptScanNFCActivity::class.java).also {
+
+            
             /**
              * Truyền access token chứa bearer
              */
-            it.putExtra(KeyIntentConstantsNFC.ACCESS_TOKEN, json.getString("access_token"))
+            it.putExtra(KeyIntentConstantsNFC.ACCESS_TOKEN, json.optString(KeyArgumentMethodChannel.ACCESS_TOKEN, ""))
             /**
              * Truyền token id
              */
-            it.putExtra(KeyIntentConstantsNFC.TOKEN_ID, json.getString("token_id"))
+            it.putExtra(KeyIntentConstantsNFC.TOKEN_ID, json.optString(KeyArgumentMethodChannel.TOKEN_ID, ""))
             /**
              * Truyền token key
              */
-            it.putExtra(KeyIntentConstantsNFC.TOKEN_KEY, json.getString("token_key"))
+            it.putExtra(KeyIntentConstantsNFC.TOKEN_KEY, json.optString(KeyArgumentMethodChannel.TOKEN_KEY, ""))
             /**
              * Truyền access token ekyc chứa bearer
              */
-            it.putExtra(KeyIntentConstantsNFC.ACCESS_TOKEN_EKYC, json.getString("access_token_ekyc"))
+            it.putExtra(KeyIntentConstantsNFC.ACCESS_TOKEN_EKYC, json.optString(KeyArgumentMethodChannel.ACCESS_TOKEN_EKYC, ""))
             /**
              * Truyền token id ekyc
              */
-            it.putExtra(KeyIntentConstantsNFC.TOKEN_ID_EKYC, json.getString("token_id_ekyc"))
+            it.putExtra(KeyIntentConstantsNFC.TOKEN_ID_EKYC, json.optString(KeyArgumentMethodChannel.TOKEN_ID_EKYC, ""))
             /**
              * Truyền token key ekyc
              */
-            it.putExtra(KeyIntentConstantsNFC.TOKEN_KEY_EKYC, json.getString("token_key_ekyc"))
+            it.putExtra(KeyIntentConstantsNFC.TOKEN_KEY_EKYC, json.optString(KeyArgumentMethodChannel.TOKEN_KEY_EKYC, ""))
             /**
              * điều chỉnh ngôn ngữ tiếng việt
              *    - vi: tiếng việt
@@ -99,11 +101,11 @@ class MainActivity : FlutterActivity(), MethodChannel.MethodCallHandler {
             // set baseDomain="" => sử dụng mặc định là Product
             it.putExtra(KeyIntentConstantsNFC.BASE_URL, "")
             // truyền id định danh căn cước công dân
-            it.putExtra(KeyIntentConstantsNFC.ID_NUMBER_CARD, json.getString("card_id"))
+            it.putExtra(KeyIntentConstantsNFC.ID_NUMBER_CARD, json.optString(KeyArgumentMethodChannel.ID_NUMBER, ""))
             // truyền ngày sinh ghi trên căn cước công dân
-            it.putExtra(KeyIntentConstantsNFC.BIRTHDAY_CARD, json.getString("card_dob"))
+            it.putExtra(KeyIntentConstantsNFC.BIRTHDAY_CARD, json.optString(KeyArgumentMethodChannel.BIRTHDAY, ""))
             // truyền ngày hết hạn căn cước công dân
-            it.putExtra(KeyIntentConstantsNFC.EXPIRED_DATE_CARD, json.getString("card_expire_date"))
+            it.putExtra(KeyIntentConstantsNFC.EXPIRED_DATE_CARD, json.optString(KeyArgumentMethodChannel.EXPIRED_DATE, ""))
          }
       }
 
@@ -129,9 +131,9 @@ class MainActivity : FlutterActivity(), MethodChannel.MethodCallHandler {
       val json = parseJsonFromArgs(call)
       val intent = when (call.method) {
          "navigateToNfcQrCode" -> navigateToNfcQrCode(json)
-         "navigateToOnlyNFC" -> navigateToOnlyNFC(this, json)
-         "navigateTo_MRZ_NFC" -> navigateTo_MRZ_NFC(this, json)
-         "navigateToScanNfcNoGuide" -> Intent(this, NfcTransparentActivity::class.java).also {
+         "actionStart_Only_NFC" -> navigateToOnlyNFC(this, json)
+         "actionStart_MRZ_NFC" -> navigateTo_MRZ_NFC(this, json)
+         "actionStart_Only_NFC_WithoutUI" -> Intent(this, NfcTransparentActivity::class.java).also {
             it.putExtra(
                NfcTransparentActivity.KEY_EXTRA_INFO_NFC, json.toString()
             )
@@ -167,27 +169,27 @@ class MainActivity : FlutterActivity(), MethodChannel.MethodCallHandler {
          /**
           * Truyền access token chứa bearer
           */
-         it.putExtra(KeyIntentConstantsNFC.ACCESS_TOKEN, json.getString("access_token"))
+         it.putExtra(KeyIntentConstantsNFC.ACCESS_TOKEN, json.optString(KeyArgumentMethodChannel.ACCESS_TOKEN, ""))
          /**
           * Truyền token id
           */
-         it.putExtra(KeyIntentConstantsNFC.TOKEN_ID, json.getString("token_id"))
+        it.putExtra(KeyIntentConstantsNFC.TOKEN_ID, json.optString(KeyArgumentMethodChannel.TOKEN_ID, ""))
          /**
           * Truyền token key
           */
-         it.putExtra(KeyIntentConstantsNFC.TOKEN_KEY, json.getString("token_key"))
+         it.putExtra(KeyIntentConstantsNFC.TOKEN_KEY, json.optString(KeyArgumentMethodChannel.TOKEN_KEY, ""))
          /**
           * Truyền access token ekyc chứa bearer
           */
-         it.putExtra(KeyIntentConstantsNFC.ACCESS_TOKEN_EKYC, json.getString("access_token_ekyc"))
+         it.putExtra(KeyIntentConstantsNFC.ACCESS_TOKEN_EKYC, json.optString(KeyArgumentMethodChannel.ACCESS_TOKEN_EKYC, ""))
          /**
           * Truyền token id ekyc
           */
-         it.putExtra(KeyIntentConstantsNFC.TOKEN_ID_EKYC, json.getString("token_id_ekyc"))
+         it.putExtra(KeyIntentConstantsNFC.TOKEN_ID_EKYC, json.optString(KeyArgumentMethodChannel.TOKEN_ID_EKYC, ""))
          /**
           * Truyền token key ekyc
           */
-         it.putExtra(KeyIntentConstantsNFC.TOKEN_KEY_EKYC, json.getString("token_key_ekyc"))
+         it.putExtra(KeyIntentConstantsNFC.TOKEN_KEY_EKYC, json.optString(KeyArgumentMethodChannel.TOKEN_KEY_EKYC, ""))
          /**
           * điều chỉnh ngôn ngữ tiếng việt
           *    - vi: tiếng việt
@@ -243,27 +245,27 @@ class MainActivity : FlutterActivity(), MethodChannel.MethodCallHandler {
          /**
           * Truyền access token chứa bearer
           */
-         it.putExtra(KeyIntentConstantsNFC.ACCESS_TOKEN, json.getString("access_token"))
+         it.putExtra(KeyIntentConstantsNFC.ACCESS_TOKEN, json.optString(KeyArgumentMethodChannel.ACCESS_TOKEN, ""))
          /**
           * Truyền token id
           */
-         it.putExtra(KeyIntentConstantsNFC.TOKEN_ID, json.getString("token_id"))
+         it.putExtra(KeyIntentConstantsNFC.TOKEN_ID, json.optString(KeyArgumentMethodChannel.TOKEN_ID, ""))
          /**
           * Truyền token key
           */
-         it.putExtra(KeyIntentConstantsNFC.TOKEN_KEY, json.getString("token_key"))
+         it.putExtra(KeyIntentConstantsNFC.TOKEN_KEY, json.optString(KeyArgumentMethodChannel.TOKEN_KEY, ""))
          /**
           * Truyền access token ekyc chứa bearer
           */
-         it.putExtra(KeyIntentConstantsNFC.ACCESS_TOKEN_EKYC, json.getString("access_token_ekyc"))
+         it.putExtra(KeyIntentConstantsNFC.ACCESS_TOKEN_EKYC, json.optString(KeyArgumentMethodChannel.ACCESS_TOKEN_EKYC, ""))
          /**
           * Truyền token id ekyc
           */
-         it.putExtra(KeyIntentConstantsNFC.TOKEN_ID_EKYC, json.getString("token_id_ekyc"))
+         it.putExtra(KeyIntentConstantsNFC.TOKEN_ID_EKYC, json.optString(KeyArgumentMethodChannel.TOKEN_ID_EKYC, ""))
          /**
           * Truyền token key ekyc
           */
-         it.putExtra(KeyIntentConstantsNFC.TOKEN_KEY_EKYC, json.getString("token_key_ekyc"))
+         it.putExtra(KeyIntentConstantsNFC.TOKEN_KEY_EKYC, json.optString(KeyArgumentMethodChannel.TOKEN_KEY_EKYC, ""))
          /**
           * điều chỉnh ngôn ngữ tiếng việt
           *    - vi: tiếng việt
@@ -438,3 +440,5 @@ class MainActivity : FlutterActivity(), MethodChannel.MethodCallHandler {
       value?.let { put(key, JsonUtil.prettify(it)) }
    }
 }
+
+

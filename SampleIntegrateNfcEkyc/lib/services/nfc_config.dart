@@ -2,6 +2,14 @@ import 'package:flutter/foundation.dart';
 
 /// Configuration class for NFC SDK parameters
 class NfcConfig {
+  final String? accessToken;
+  final String? tokenId;
+  final String? tokenKey;
+
+  final String? accessTokenEKYC;
+  final String? tokenIdEKYC;
+  final String? tokenKeyEKYC;
+
   // Optional SDK presentation options (currently hardcoded in iOS, reserved for future)
   final String? languageSdk; // "icekyc_vi" | "icekyc_en"
   final bool? isShowTutorial;
@@ -13,6 +21,12 @@ class NfcConfig {
   final String? expiredDate; // yymmdd
 
   const NfcConfig({
+    this.accessToken,
+    this.tokenId,
+    this.tokenKey,
+    this.accessTokenEKYC,
+    this.tokenIdEKYC,
+    this.tokenKeyEKYC,
     this.languageSdk,
     this.isShowTutorial,
     this.isEnableGotIt,
@@ -25,7 +39,26 @@ class NfcConfig {
   Map<String, dynamic> toMap() {
     final map = <String, dynamic>{};
 
-    // Only the following keys are read by current iOS implementations for manual NFC:
+    if (accessToken != null) {
+      map['accessToken'] = accessToken;
+    }
+    if (tokenId != null) {
+      map['tokenId'] = tokenId;
+    }
+    if (tokenKey != null) {
+      map['tokenKey'] = tokenKey;
+    }
+
+    if (accessTokenEKYC != null) {
+      map['accessTokenEKYC'] = accessTokenEKYC;
+    }
+    if (tokenIdEKYC != null) {
+      map['tokenIdEKYC'] = tokenIdEKYC;
+    }
+    if (tokenKeyEKYC != null) {
+      map['tokenKeyEKYC'] = tokenKeyEKYC;
+    }
+
     if (idNumber != null) {
       map['idNumber'] = idNumber;
     }
@@ -61,6 +94,12 @@ class NfcConfig {
   }
 
   NfcConfig copyWith({
+    String? accessToken,
+    String? tokenId,
+    String? tokenKey,
+    String? accessTokenEKYC,
+    String? tokenIdEKYC,
+    String? tokenKeyEKYC,
     String? languageSdk,
     bool? isShowTutorial,
     bool? isEnableGotIt,
@@ -69,6 +108,12 @@ class NfcConfig {
     String? expiredDate,
   }) {
     return NfcConfig(
+      accessToken: accessToken ?? this.accessToken,
+      tokenId: tokenId ?? this.tokenId,
+      tokenKey: tokenKey ?? this.tokenKey,
+      accessTokenEKYC: accessTokenEKYC ?? this.accessTokenEKYC,
+      tokenIdEKYC: tokenIdEKYC ?? this.tokenIdEKYC,
+      tokenKeyEKYC: tokenKeyEKYC ?? this.tokenKeyEKYC,
       languageSdk: languageSdk ?? this.languageSdk,
       isShowTutorial: isShowTutorial ?? this.isShowTutorial,
       isEnableGotIt: isEnableGotIt ?? this.isEnableGotIt,

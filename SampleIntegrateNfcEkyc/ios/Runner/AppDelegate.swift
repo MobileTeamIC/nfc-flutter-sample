@@ -48,24 +48,36 @@ import ICNFCCardReader
     
     //MARK: - QR and NFC
     // Thực hiện quét mã QR và đọc thông tin thẻ Căn cước NFC
-    private func actionOpenQRAndNFC(_ controller: UIViewController) {
+    private func actionOpenQRAndNFC(_ controller: UIViewController,  args: [String: Any]) {
             // Chức năng đọc thông tin thẻ chip bằng NFC, từ iOS 13.0 trở lên
         if #available(iOS 13.0, *) {
             let objICMainNFCReader = ICMainNFCReaderRouter.createModule() as! ICMainNFCReaderViewController
             
-            // Mã bảo mật khi thực hiện sử dụng dịch vụ NFC, có định dạng "Bearer + (Access token)". Mặc định là "" ✓
-            objICMainNFCReader.accessToken = ""
-            // Mã bảo mật khi thực hiện sử dụng dịch vụ NFC. Mặc định là "" ✓
-            objICMainNFCReader.tokenId = ""
-            // Mã bảo mật khi thực hiện sử dụng dịch vụ NFC. Mặc định là "" ✓
-            objICMainNFCReader.tokenKey = ""
+            let accessToken = args["accessToken"] as? String ?? ""
+            let tokenId = args["tokenId"] as? String ?? ""
+            let tokenKey = args["tokenKey"] as? String ?? ""
+            let accessTokenEKYC = args["accessTokenEKYC"] as? String ?? ""
+            let tokenIdEKYC = args["tokenIdEKYC"] as? String ?? ""
+            let tokenKeyEKYC = args["tokenKeyEKYC"] as? String ?? ""
+
+            let languageSdk = args["languageSdk"] as? String ?? "icekyc_vi"
+            let isShowTutorial = args["isShowTutorial"] as? Bool ?? false
+            let isEnableGotIt = args["isEnableGotIt"] as? Bool ?? false
+
 
             // Mã bảo mật khi thực hiện sử dụng dịch vụ NFC, có định dạng "Bearer + (Access token)". Mặc định là "" ✓
-            objICMainNFCReader.accessTokenEKYC = ""
+            objICMainNFCReader.accessToken = accessToken
+            // Mã bảo mật khi thực hiện sử dụng dịch vụ NFC. Mặc định là "" ✓
+            objICMainNFCReader.tokenId = tokenId
+            // Mã bảo mật khi thực hiện sử dụng dịch vụ NFC. Mặc định là "" ✓
+            objICMainNFCReader.tokenKey = tokenKey
+
+            // Mã bảo mật khi thực hiện sử dụng dịch vụ NFC, có định dạng "Bearer + (Access token)". Mặc định là "" ✓
+            objICMainNFCReader.accessTokenEKYC = accessTokenEKYC
             // Mã định danh luồng giao dịch khi thực hiện sử dụng dịch vụ eKYC VNPT. Mặc định là "" ✓
-            objICMainNFCReader.tokenIdEKYC = ""
+            objICMainNFCReader.tokenIdEKYC = tokenIdEKYC
             // Mã bảo mật khi thực hiện sử dụng dịch vụ eKYC. Mặc định là "" ✓
-            objICMainNFCReader.tokenKeyEKYC = ""
+            objICMainNFCReader.tokenKeyEKYC = tokenKeyEKYC
 
               /*========== CÁC THUỘC TÍNH CHÍNH ==========*/
             
@@ -75,14 +87,14 @@ import ICNFCCardReader
             // Giá trị này xác định ngôn ngữ được sử dụng trong SDK.
             // - icnfc_vi: Tiếng Việt
             // - icnfc_en: Tiếng Anh
-            objICMainNFCReader.languageSdk = "icekyc_vi"
+            objICMainNFCReader.languageSdk = languageSdk
             
             // Giá trị này xác định việc có hiển thị màn hình trợ giúp hay không.
-            objICMainNFCReader.isShowTutorial = true
+            objICMainNFCReader.isShowTutorial = isShowTutorial
             
             // Bật chức năng hiển thị nút bấm "Bỏ qua hướng dẫn" tại các màn hình hướng dẫn bằng video. Mặc định false (Không hiện)
             // Bật chức năng hiển thị nút bấm "Bỏ qua hướng dẫn".
-            objICMainNFCReader.isEnableGotIt = true
+            objICMainNFCReader.isEnableGotIt = isEnableGotIt
             
             // Thuộc tính quy định việc đọc thông tin NFC
             // - QRCode: Quét mã QR sau đó đọc thông tin thẻ Chip NFC
@@ -224,25 +236,35 @@ import ICNFCCardReader
     
     //MARK: - MRZ_NFC
     // Thực hiện quét mã MRZ và đọc thông tin thẻ Căn cước NFC
-    private func actionStart_MRZ_NFC(_ controller: UIViewController) {
+    private func actionStart_MRZ_NFC(_ controller: UIViewController, args: [String: Any]) {
         
         // Chức năng đọc thông tin thẻ chip bằng NFC, từ iOS 13.0 trở lên
         if #available(iOS 13.0, *) {
             let objICMainNFCReader = ICMainNFCReaderRouter.createModule() as! ICMainNFCReaderViewController
             
-            // Mã bảo mật khi thực hiện sử dụng dịch vụ NFC, có định dạng "Bearer + (Access token)". Mặc định là "" ✓
-            objICMainNFCReader.accessToken = ""
-            // Mã bảo mật khi thực hiện sử dụng dịch vụ NFC. Mặc định là "" ✓
-            objICMainNFCReader.tokenId = ""
-            // Mã bảo mật khi thực hiện sử dụng dịch vụ NFC. Mặc định là "" ✓
-            objICMainNFCReader.tokenKey = ""
+            let accessToken = args["accessToken"] as? String ?? ""
+            let tokenId = args["tokenId"] as? String ?? ""
+            let tokenKey = args["tokenKey"] as? String ?? ""
+            let accessTokenEKYC = args["accessTokenEKYC"] as? String ?? ""
+            let tokenIdEKYC = args["tokenIdEKYC"] as? String ?? ""
+            let tokenKeyEKYC = args["tokenKeyEKYC"] as? String ?? ""
+            let languageSdk = args["languageSdk"] as? String ?? "icekyc_vi"
+            let isShowTutorial = args["isShowTutorial"] as? Bool ?? false
+            let isEnableGotIt = args["isEnableGotIt"] as? Bool ?? false
 
             // Mã bảo mật khi thực hiện sử dụng dịch vụ NFC, có định dạng "Bearer + (Access token)". Mặc định là "" ✓
-            objICMainNFCReader.accessTokenEKYC = ""
+            objICMainNFCReader.accessToken = accessToken
+            // Mã bảo mật khi thực hiện sử dụng dịch vụ NFC. Mặc định là "" ✓
+            objICMainNFCReader.tokenId = tokenId
+            // Mã bảo mật khi thực hiện sử dụng dịch vụ NFC. Mặc định là "" ✓
+            objICMainNFCReader.tokenKey = tokenKey
+
+            // Mã bảo mật khi thực hiện sử dụng dịch vụ NFC, có định dạng "Bearer + (Access token)". Mặc định là "" ✓
+            objICMainNFCReader.accessTokenEKYC = accessTokenEKYC
             // Mã định danh luồng giao dịch khi thực hiện sử dụng dịch vụ eKYC VNPT. Mặc định là "" ✓
-            objICMainNFCReader.tokenIdEKYC = ""
+            objICMainNFCReader.tokenIdEKYC = tokenIdEKYC
             // Mã bảo mật khi thực hiện sử dụng dịch vụ eKYC. Mặc định là "" ✓
-            objICMainNFCReader.tokenKeyEKYC = ""
+            objICMainNFCReader.tokenKeyEKYC = tokenKeyEKYC
 
             /*========== CÁC THUỘC TÍNH CHÍNH ==========*/
             
@@ -252,10 +274,10 @@ import ICNFCCardReader
             // Giá trị này xác định ngôn ngữ được sử dụng trong SDK.
             // - icnfc_vi: Tiếng Việt
             // - icnfc_en: Tiếng Anh
-            objICMainNFCReader.languageSdk = "icekyc_vi"
+            objICMainNFCReader.languageSdk = languageSdk
             
             // Giá trị này xác định việc có hiển thị màn hình trợ giúp hay không.
-            objICMainNFCReader.isShowTutorial = true
+            objICMainNFCReader.isShowTutorial = isShowTutorial
             
             
             // Thuộc tính quy định việc đọc thông tin NFC
@@ -267,7 +289,7 @@ import ICNFCCardReader
             
             // Bật chức năng hiển thị nút bấm "Bỏ qua hướng dẫn" tại các màn hình hướng dẫn bằng video. Mặc định false (Không hiện)
             // Bật chức năng hiển thị nút bấm "Bỏ qua hướng dẫn".
-            objICMainNFCReader.isEnableGotIt = true
+            objICMainNFCReader.isEnableGotIt = isEnableGotIt
             
             // Thuộc tính quy định việc đọc thông tin NFC
             // - QRCode: Quét mã QR sau đó đọc thông tin thẻ Chip NFC
@@ -411,10 +433,21 @@ import ICNFCCardReader
     //MARK: - ONLY_NFC
       // Truyền thông tin và mở SDK để đọc thông tin thẻ Căn cước
      private func actionStart_Only_NFC(_ controller: UIViewController, args: [String: Any]) {
-        
+        let accessToken = args["accessToken"] as? String ?? ""
+        let tokenId = args["tokenId"] as? String ?? ""
+        let tokenKey = args["tokenKey"] as? String ?? ""
+        let accessTokenEKYC = args["accessTokenEKYC"] as? String ?? ""
+        let tokenIdEKYC = args["tokenIdEKYC"] as? String ?? ""
+        let tokenKeyEKYC = args["tokenKeyEKYC"] as? String ?? ""
+
         let idNumber = args["idNumber"] as? String ?? ""
         let birthday = args["birthday"] as? String ?? ""
         let expiredDate = args["expiredDate"] as? String ?? ""
+
+        let languageSdk = args["languageSdk"] as? String ?? "icekyc_vi"
+        let isShowTutorial = args["isShowTutorial"] as? Bool ?? false
+        let isEnableGotIt = args["isEnableGotIt"] as? Bool ?? false
+
         
         if idNumber == "" || idNumber.count != 12 || birthday == "" || birthday.count != 6 || expiredDate == "" || expiredDate.count != 6 {
             debugPrint("Bạn cần nhập thông tin Số thẻ (12 số), ngày sinh hoặc ngày hết hạn")
@@ -427,18 +460,18 @@ import ICNFCCardReader
             let objICMainNFCReader = ICMainNFCReaderRouter.createModule() as! ICMainNFCReaderViewController
             
             // Mã bảo mật khi thực hiện sử dụng dịch vụ NFC, có định dạng "Bearer + (Access token)". Mặc định là "" ✓
-            objICMainNFCReader.accessToken = ""
+            objICMainNFCReader.accessToken = accessToken
             // Mã bảo mật khi thực hiện sử dụng dịch vụ NFC. Mặc định là "" ✓
-            objICMainNFCReader.tokenId = ""
+            objICMainNFCReader.tokenId = tokenId
             // Mã bảo mật khi thực hiện sử dụng dịch vụ NFC. Mặc định là "" ✓
-            objICMainNFCReader.tokenKey = ""
+            objICMainNFCReader.tokenKey = tokenKey
 
             // Mã bảo mật khi thực hiện sử dụng dịch vụ NFC, có định dạng "Bearer + (Access token)". Mặc định là "" ✓
-            objICMainNFCReader.accessTokenEKYC = ""
+            objICMainNFCReader.accessTokenEKYC = accessTokenEKYC
             // Mã định danh luồng giao dịch khi thực hiện sử dụng dịch vụ eKYC VNPT. Mặc định là "" ✓
-            objICMainNFCReader.tokenIdEKYC = ""
+            objICMainNFCReader.tokenIdEKYC = tokenIdEKYC
             // Mã bảo mật khi thực hiện sử dụng dịch vụ eKYC. Mặc định là "" ✓
-            objICMainNFCReader.tokenKeyEKYC = ""
+            objICMainNFCReader.tokenKeyEKYC = tokenKeyEKYC
             
             /*========== CÁC THUỘC TÍNH CHÍNH ==========*/
             
@@ -448,14 +481,14 @@ import ICNFCCardReader
             // Giá trị này xác định ngôn ngữ được sử dụng trong SDK.
             // - icnfc_vi: Tiếng Việt
             // - icnfc_en: Tiếng Anh
-            objICMainNFCReader.languageSdk = "icekyc_vi"
+            objICMainNFCReader.languageSdk = languageSdk
             
             // Giá trị này xác định việc có hiển thị màn hình trợ giúp hay không.
-            objICMainNFCReader.isShowTutorial = true
+            objICMainNFCReader.isShowTutorial = isShowTutorial
             
             // Bật chức năng hiển thị nút bấm "Bỏ qua hướng dẫn" tại các màn hình hướng dẫn bằng video. Mặc định false (Không hiện)
             // Bật chức năng hiển thị nút bấm "Bỏ qua hướng dẫn".
-            objICMainNFCReader.isEnableGotIt = true
+            objICMainNFCReader.isEnableGotIt = isEnableGotIt
             
             // Thuộc tính quy định việc đọc thông tin NFC
             // - QRCode: Quét mã QR sau đó đọc thông tin thẻ Chip NFC
@@ -597,7 +630,13 @@ import ICNFCCardReader
     // MARK: - Only NFC without UI
       // Truyền thông tin và đọc thông tin thẻ Căn cước không có giao diện SDK
     private func actionStart_Only_NFC_WithoutUI(_ controller: UIViewController, args: [String: Any]) {
-        
+        let accessToken = args["accessToken"] as? String ?? ""
+        let tokenId = args["tokenId"] as? String ?? ""
+        let tokenKey = args["tokenKey"] as? String ?? ""
+        let accessTokenEKYC = args["accessTokenEKYC"] as? String ?? ""
+        let tokenIdEKYC = args["tokenIdEKYC"] as? String ?? ""
+        let tokenKeyEKYC = args["tokenKeyEKYC"] as? String ?? ""
+
         let idNumber = args["idNumber"] as? String ?? ""
         let birthday = args["birthday"] as? String ?? ""
         let expiredDate = args["expiredDate"] as? String ?? ""
@@ -612,18 +651,19 @@ import ICNFCCardReader
             let objICMainNFCReader = ICMainNFCReaderRouter.createModule() as! ICMainNFCReaderViewController
             
             // Mã bảo mật khi thực hiện sử dụng dịch vụ NFC, có định dạng "Bearer + (Access token)". Mặc định là "" ✓
-            objICMainNFCReader.accessToken = ""
+            objICMainNFCReader.accessToken = accessToken
             // Mã bảo mật khi thực hiện sử dụng dịch vụ NFC. Mặc định là "" ✓
-            objICMainNFCReader.tokenId = ""
+            objICMainNFCReader.tokenId = tokenId
             // Mã bảo mật khi thực hiện sử dụng dịch vụ NFC. Mặc định là "" ✓
-            objICMainNFCReader.tokenKey = ""
+            objICMainNFCReader.tokenKey = tokenKey
 
             // Mã bảo mật khi thực hiện sử dụng dịch vụ NFC, có định dạng "Bearer + (Access token)". Mặc định là "" ✓
-            objICMainNFCReader.accessTokenEKYC = ""
+            objICMainNFCReader.accessTokenEKYC = accessTokenEKYC
             // Mã định danh luồng giao dịch khi thực hiện sử dụng dịch vụ eKYC VNPT. Mặc định là "" ✓
-            objICMainNFCReader.tokenIdEKYC = ""
+            objICMainNFCReader.tokenIdEKYC = tokenIdEKYC
             // Mã bảo mật khi thực hiện sử dụng dịch vụ eKYC. Mặc định là "" ✓
-            objICMainNFCReader.tokenKeyEKYC = ""
+            objICMainNFCReader.tokenKeyEKYC = tokenKeyEKYC
+
             /*========== CÁC THUỘC TÍNH CHÍNH ==========*/
             
             // Đặt giá trị DELEGATE để nhận kết quả trả về
