@@ -7,14 +7,12 @@ import android.view.View
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.WindowCompat
 import com.google.gson.Gson
-import com.vnpt.ic.sample.integrate.nfc.sampleintegratenfcekyc.MainActivity.Companion.EKYC_REQUEST_CODE
 import com.vnpt.ic.sample.integrate.nfc.sampleintegratenfcekyc.MainActivity.Companion.NFC_RESULT
 import com.vnptit.nfc.nfc_tool.NfcCallback
 import com.vnptit.nfc.nfc_tool.NfcError
 import com.vnptit.nfc.nfc_tool.NfcOptionNoGuide
 import com.vnptit.nfc.nfc_tool.NfcResult
 import com.vnptit.nfc.nfc_tool.NfcTool
-import com.vnptit.nfc.utils.KeyResultConstantsNFC
 import org.json.JSONObject
 
 class NfcTransparentActivity : AppCompatActivity() {
@@ -38,7 +36,7 @@ class NfcTransparentActivity : AppCompatActivity() {
       nfcTool?.clearReadChip()
       // start new session
       nfcTool?.startReadChip(
-         NfcOptionNoGuide().setExtras(MainActivity.navigateToScanNfc(this, jsonObject)),
+         NfcOptionNoGuide().setExtras(MainActivity.navigateToOnlyNFC(this, jsonObject)),
          object : NfcCallback() {
             override fun onSuccess(result: NfcResult?) {
                val intent = Intent()
